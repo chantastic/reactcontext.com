@@ -254,6 +254,22 @@ const { Consumer: UserConsumer, Provider: UserProvider } = UserContext;
 <OrganizationProvider value="some value">
 ```
 
+## Data Distribution, Not State Management
+
+Context makes it possible to distribute data to every component in a component tree.
+
+It is not 
+
+## A Mental Model for Context
+
+TODO: add illustrations
+TODO: maybe use a different analogy because lots of people don't have a lot of experience with sprinklers
+
+I think of Context as the head of a sprinkler.
+Without a sprinkler head, water irrigation shoots directly out of pipes in a straight line.
+
+The sprinkler head distributes that water to the places it needs to go.
+
 ## Does Context "replace" or "deprecate" Redux?
 
 No.
