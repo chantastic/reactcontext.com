@@ -7,12 +7,15 @@
 * [A "Shit" Example](#a-shit-example)
 * [Create, Consume, and Provide Context](#create-consume-and-provide-context)
 * [Provide value](#provide-value)
-* [Stylistic Options](#stylistic-options)
-* [Modularizing Contexts](#modularizing-contexts)
-* [Multiple Context Providers](#stacking-contexts)
+* [Authoring style](#authoring-style)
 * [Data Distribution, Not State Management](#data-distribution-not-state-management)
-* [Distribute Component state with Context](#distribute-component-state-with-context)
 * [A Mental Model for Context](#a-mental-model-for-context)
+* [Does Context "replace" or "deprecate" Redux?](#does-context-replace-or-deprecate-redux)
+
+### Todo
+* Modularizing Contexts
+* Examples
+* What does this mean for Redux?
 
 ## A "Shit" Example
 
@@ -198,9 +201,9 @@ let ClassComponentContext = React.createContext(
 );
 ```
 
-### value is required for Providers
+### value is required on Context Providers
 
-Where a Context's `Provider` component is used, a `value` is required.
+Where a Context `Provider` is used, the `value` prop is required.
 
 ```jsx
 <SomeContext.Provider value="value is a required prop">
@@ -208,11 +211,12 @@ Where a Context's `Provider` component is used, a `value` is required.
 </SomeContext.Provider>
 ```
 
-## Stylistic authoring options
+## Authoring style
 
 A Context's `Consumer` and `Provider` components can be accessed in 2 ways.
 
 The Examples above use JSX' property access syntax.
+This is the syntax used in official documentation.
 
 ```jsx
 <SomeContext.Provider value="some value">
@@ -222,7 +226,7 @@ The Examples above use JSX' property access syntax.
 </SomeContext.Provider>
 ```
 
-You may prefer [object destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring) to assign Context components to local variables.
+You may prefer to use [object destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring) to assign Context components to local variables.
 
 ```jsx
 // Destructure your Context's Consumer and Provider
@@ -235,7 +239,7 @@ const { Consumer, Provider } = NameContext;
 </Provider>
 ```
 
-That works fine with one Context but take care where multiple contetx apee 
+Take care where multiple contexts are used.
 
 ```jsx
 const { Consumer: OrgConsumer, Provider: OrganizationProvider } = OrganizationContext;
@@ -250,7 +254,32 @@ const { Consumer: UserConsumer, Provider: UserProvider } = UserContext;
 <OrganizationProvider value="some value">
 ```
 
-## TO BE CONTINUED
+## Does Context "replace" or "deprecate" Redux?
+
+No.
+
+Not even a little.
+
+Here's how [Redux](https://redux.js.org/) describes itself:
+
+> Redux is a predictable state container for JavaScript apps.
+>
+> It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test... it provides a great developer experience, such as live code editing combined with a time traveling debugger.
+
+React implements an architecture that is not React-specific.
+This is an overwhelming value to companies that use multiple UI frameworks.
+Angular, Ember, Vue, Backbone, no framework—Redux can manage state for all apps.
+You can't achieve this same result with Context.
+While you might use React's new Context API to implement the same architecture, it will always be React-spefic.
+
+The bindings for Redux—[react-redux](https://github.com/reactjs/react-redux)—use the existing Context to `Connect` React components to Redux Stores—consuming data and dispatch actions.
+While React's new Context API exposes a stable Context API,
+it does not fundamentally change how react-redux has always worked.
+
+In the future, Redux will continue implementing this architecture using React's new Context API.
+
+The benefit of Redux is its framework agnosticism, vibrant community, powerfully tooling, tremendous documentation, and .
+These are not things "replaced" or "deprecated" by the announcement of a stable Context API.
 
 ---
 
