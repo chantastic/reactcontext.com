@@ -178,6 +178,26 @@ let ObjectContext = React.createContext({
 });
 ```
 
+`value` can be more complex structures like React Elements, class components, and functional components.
+
+```jsx
+let ReactElementContext = React.createContext(
+  <span>React Element</span>
+);
+
+let FunctionalComponentContext = React.createContext(
+  props => <span>Function Component</span>
+);
+
+let ClassComponentContext = React.createContext(
+  class extends React.Component {
+    render() {
+      return <span>Class Component</span>;
+    }
+  }
+);
+```
+
 ### value is required for Providers
 
 Where a Context's `Provider` component is used, a `value` is required.
