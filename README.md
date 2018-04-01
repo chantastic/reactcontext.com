@@ -13,6 +13,7 @@
 * [Does Context "replace" or "deprecate" Redux?](#does-context-replace-or-deprecate-redux)
 
 ### Todo
+
 * Modularizing Contexts
 * Examples
 * What does this mean for Redux?
@@ -111,7 +112,7 @@ Here, `NameContext.Consumer` calls is `children` function with the default `valu
 Leterally:
 
 ```js
-this.props.children("Guest")
+this.props.children("Guest");
 ```
 
 So, how do we provide Context, where the default isn't acceptable?
@@ -177,20 +178,18 @@ let ObjectContext = React.createContext({
   aString: "string",
   aNumber: 42,
   aFunction: () => alert("Context function"),
-  anArray: ["some", "array", "elements"],
+  anArray: ["some", "array", "elements"]
 });
 ```
 
 `value` can be more complex structures like React Elements, class components, and functional components.
 
 ```jsx
-let ReactElementContext = React.createContext(
-  <span>React Element</span>
-);
+let ReactElementContext = React.createContext(<span>React Element</span>);
 
-let FunctionalComponentContext = React.createContext(
-  props => <span>Function Component</span>
-);
+let FunctionalComponentContext = React.createContext(props => (
+  <span>Function Component</span>
+));
 
 let ClassComponentContext = React.createContext(
   class extends React.Component {
@@ -220,9 +219,7 @@ This is the syntax used in official documentation.
 
 ```jsx
 <SomeContext.Provider value="some value">
-  <Context.Consumer>
-    {value => <span>{value}</span>}
-  </Context.Consumer>
+  <Context.Consumer>{value => <span>{value}</span>}</Context.Consumer>
 </SomeContext.Provider>
 ```
 
@@ -233,10 +230,8 @@ You may prefer to use [object destructuring](https://developer.mozilla.org/en-US
 const { Consumer, Provider } = NameContext;
 
 <Provider value="some value">
-  <Consumer>
-    {value => <span>{value}</span>}
-  </Consumer>
-</Provider>
+  <Consumer>{value => <span>{value}</span>}</Consumer>
+</Provider>;
 ```
 
 Take care where multiple contexts are used.
@@ -258,7 +253,58 @@ const { Consumer: UserConsumer, Provider: UserProvider } = UserContext;
 
 Context makes it possible to distribute data to every component in a component tree.
 
-It is not 
+It is not a way to manage state.
+Though it does provide the mechanism needed to distrubute data and update functions.
+
+Here's an example of a Stateful Container that uses Context to distribute local `state` and an `update` function.
+
+```jsx
+let StateContext = React.createContext();
+
+class StateProvider extends React.Component {
+  static defaultProps = {
+    initialState: {}
+  };
+
+  state = { ...this.props.initialState };
+
+  update = (...args) => this.setState.apply(this, args);
+
+  render() {
+    return (
+      <StateContext.Provider
+        value={{
+          state: this.state,
+          update: this.update
+        }}
+        {...this.props}
+      />
+    );
+  }
+}
+
+let App = () => (
+  <StateProvider initialState={{ count: 0 }}>
+    <StateContext.Consumer>
+      {({ state, update }) => (
+        <div>
+          <div>{state.count}</div>
+
+          <button
+            type="button"
+            onClick={() =>
+              update(({ count }) => ({ count: count + 1 }))
+            }
+          >
+            increment
+          </button>
+        </div>
+      )}
+    </StateContext.Consumer>
+  </StateProvider>
+);
+
+```
 
 ## A Mental Model for Context
 
