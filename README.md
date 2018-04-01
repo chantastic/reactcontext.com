@@ -70,7 +70,7 @@ let VisitToGrandmasHouse = () => (
 Context is a 3-part system.
 You **create** it, **consume** it, and **provide** it.
 
-**Create, consume, provide**. Create, consume, provide... keep repeating that.
+**Create, consume, provide**. Create, consume, provide... rinse and repeat.
 
 ### Create Context
 
@@ -95,7 +95,7 @@ Let's dive into the `Consumer`.
 
 ### Consume Context
 
-A Context's `Consumer` is a component that takes a [function as children](https://reactpatterns.com/#render-callback).
+A Context `Consumer` is a component that takes a [function as children](https://reactpatterns.com/#render-callback).
 
 ```jsx
 let NameContext = React.createContext("Guest");
@@ -107,7 +107,7 @@ let ContextGreeting = () => (
 // => <h1>👋 Guest!</h1>
 ```
 
-Here, `NameContext.Consumer` calls is `children` function with the default `value` it was created with.
+Here, `NameContext.Consumer` calls its `children` function with the default `value` it was created with.
 
 Leterally:
 
@@ -115,14 +115,14 @@ Leterally:
 this.props.children("Guest");
 ```
 
-So, how do we provide Context, where the default isn't acceptable?
+So, how do we provide Context?
 I'm always glad you ask...
 
 ### Provide Context
 
-A Context's `Provider` is a component that takes a `value` prop and makes it available to every nested component—no mater how deep.
+A Context `Provider` is a component that takes a `value` prop and makes it available to every component in a component tree—no mater how deep.
 
-Context Providers in close proximity:
+Context Providers work close proximity:
 
 ```js
 let NameContext = React.createContext("Guest");
@@ -163,7 +163,7 @@ Prop Drills not required for assembly.
 ## Provide value
 
 A Context's `value` can take any shape.
-Here are examples of valid Context, using a default `value`:
+Here are examples of valid Contexts, using a default `value`:
 
 ```jsx
 let StringContext = React.createContext("string");
@@ -253,10 +253,10 @@ const { Consumer: UserConsumer, Provider: UserProvider } = UserContext;
 
 Context makes it possible to distribute data to every component in a component tree.
 
-It is not a way to manage state.
-Though it does provide the mechanism needed to distrubute data and update functions.
+It's used to distribute data, not manage state.
+That said, it provides the mechanism needed to state and updater functions managed by state containers.
 
-Here's an example of a Stateful Container that uses Context to distribute local `state` and an `update` function.
+Here's an example of a stateful container that uses Context to distribute local `state` and an `update` function.
 
 ```jsx
 let StateContext = React.createContext();
