@@ -36,11 +36,18 @@ module.exports = html => {
   sup { top: -0.5em; }
   sub { bottom: -0.25em; }
   </style>
+  <style>${style}</style>
   <style>
+  h3, .h3 { font-size: 1rem; text-transform: uppercase }
+
   p, ul, ol, pre, table, blockquote  { #333 }
 
   pre { overflow: auto; max-width: 100% }
+  pre[class*="language-"] {
+    margin-bottom: 1.625rem
+  }
   code { font-size: .9em }
+  code:not([class*="language-"]) { background-color: #f4f4f4; padding: .25em .5em; border-radius: .125em }
 
   body, .article { max-width: 34em; }
   @media screen and (min-width: 0) {
@@ -50,7 +57,6 @@ module.exports = html => {
     body, .article { margin: 2rem }
   }
   </style>
-  <style>${style}</style>
 </head>
 <body>
 ${html}

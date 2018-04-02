@@ -21,20 +21,6 @@
   sup { top: -0.5em; }
   sub { bottom: -0.25em; }
   </style>
-  <style>
-  p, ul, ol, pre, table, blockquote  { #333 }
-
-  pre { overflow: auto; max-width: 100% }
-  code { font-size: .9em }
-
-  body, .article { max-width: 34em; }
-  @media screen and (min-width: 0) {
-      body, .article { margin: 1rem }
-  }
-  @media screen and (min-width: 34em) {
-    body, .article { margin: 2rem }
-  }
-  </style>
   <style>/**
  * okaidia theme for JavaScript, CSS and HTML
  * Loosely based on Monokai textmate theme by http://www.monokai.nl/
@@ -157,6 +143,27 @@ pre[class*="language-"] {
 	cursor: help;
 }
 </style>
+  <style>
+  h3, .h3 { font-size: 1rem; text-transform: uppercase }
+
+  p, ul, ol, pre, table, blockquote  { #333 }
+
+  pre { overflow: auto; max-width: 100% }
+  pre[class*="language-"] {
+    margin-bottom: 1.625rem
+  }
+  code { font-size: .9em }
+  code:not([class*="language-"]) { background-color: #f4f4f4; padding: .25em .5em; border-radius: .125em }
+  [class*="language-"] .token.comment { display: inline !important}
+
+  body, .article { max-width: 34em; }
+  @media screen and (min-width: 0) {
+      body, .article { margin: 1rem }
+  }
+  @media screen and (min-width: 34em) {
+    body, .article { margin: 2rem }
+  }
+  </style>
 </head>
 <body>
 <h1 id="lets-talk-about-context">Let's talk about Context</h1>
@@ -165,6 +172,7 @@ pre[class*="language-"] {
 <ul>
 <li><a href="#how-to-read-this">How to Read This</a></li>
 <li><a href="#a-shit-example">A "Shit" Example</a></li>
+<li><a href="#create-consume-and-provide-context">Create, Consume, and Provide Context</a></li>
 </ul>
 <h2 id="how-to-read-this">How to Read This</h2>
 <p>This page is a supplement to the React doc on Context—found <a href="https://reactjs.org/docs/context.html">here</a>.</p>
@@ -222,6 +230,70 @@ let VisitToGrandmasHouse = () => (
 
 // => Oh poop!
 </code></pre>
+<h2 id="create-consume-and-provide-context">Create, Consume, and Provide Context</h2>
+<p>Context is a 3-part system:
+<strong>Create</strong>, <strong>Consume</strong>, <strong>Provide</strong>.</p>
+<h3 id="create">Create</h3>
+<p>Create context using <code>React.createContext</code>.</p>
+<pre><code class="language-jsx">import React from "react";
+
+let NameContext = React.createContext();
+</code></pre>
+<p>This function takes an argument.</p>
+<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
+</code></pre>
+<p><code>NameContext</code> comprises two components, <code>Consumer</code> and <code>Provider</code>.</p>
+<p>Let's dive into the <code>Consumer</code>.</p>
+<h3 id="consume">Consume</h3>
+<p><code>Consumer</code> is a component that takes a <a href="https://reactpatterns.com/#render-callback">function as children</a>.</p>
+<p>Provided functions get the Context's <code>value</code> as their first argument.</p>
+<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
+
+let ContextGreeting = () => (
+  &#x3C;NameContext.Consumer>{value => &#x3C;h1>👋 {value}!&#x3C;/h1>}&#x3C;/NameContext.Consumer>
+);
+
+// => &#x3C;h1>👋 Guest!&#x3C;/h1>
+</code></pre>
+<p>In this example, the <code>value</code> is the default value given when <code>NameContext</code> was created.</p>
+<p>So, how do we provide Context?
+I'm always glad you ask...</p>
+<h3 id="provide">Provide</h3>
+<p><code>Provider</code> is a component that takes a <code>value</code> prop and makes it available to every component in the component tree below it.</p>
+<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
+
+let ContextGreeting = () => (
+  &#x3C;NameContext.Provider value="Michael">
+    &#x3C;NameContext.Consumer>
+      {name => &#x3C;h1>👋 {name}!&#x3C;/h1>}
+    &#x3C;/NameContext.Consumer>
+  &#x3C;/NameContext.Provider>
+);
+
+// => &#x3C;h1>👋 Michael!&#x3C;/h1>
+</code></pre>
+<p><code>Providers</code> work where components are deeply nested.</p>
+<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
+
+let ContextAwareName = () => (
+  &#x3C;NameContext.Consumer>
+    {name => &#x3C;h1>👋 {name}!&#x3C;/h1>}
+  &#x3C;/NameContext.Consumer>
+);
+
+let NestedContextAwareName = () => &#x3C;ContextAwareName />;
+
+let DeeplyNestedContextAwareName = () => &#x3C;NestedContextAwareName />;
+
+let ContextGreeting = () => (
+  &#x3C;NameContext.Provider value="No Prop Drills">
+    &#x3C;DeeplyNestedContextAwareName />
+  &#x3C;/NameContext.Provider>
+);
+
+// => &#x3C;h1> Welcome No Prop Drills!&#x3C;/h1>
+</code></pre>
+<p>Prop Drills not required for assembly.</p>
 <div style="margin-bottom: 8rem"></div>
 <p>© 2018 Michael Chan Some Rights Reserved</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
