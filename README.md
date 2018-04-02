@@ -251,6 +251,132 @@ let App = props => (
 );
 ```
 
+## Authoring and Modules
+
+A Context's `Consumer` and `Provider` components can be accessed in 2 ways.
+
+The Examples above use JSX' property access syntax.
+This is the style used in official documentation.
+
+```jsx
+<SomeContext.Provider value="some value">
+  <Context.Consumer>
+    {value => <span>{value}</span>}
+  </Context.Consumer>
+</SomeContext.Provider>
+```
+
+Above, you access the `Provider` and `Consumer` components through the Context object.
+
+You may prefer to use [object destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring) to assign `Provider` and `Consumer` components to local variables.
+
+```jsx
+// Destructure your Context's Consumer and Provider
+let { Consumer, Provider } = SomeContext;
+
+<Provider value="some value">
+  <Consumer>{value => <span>{value}</span>}</Consumer>
+</Provider>;
+```
+
+Take care where multiple contexts are used.
+
+```jsx
+let {
+  Consumer: OrganizationConsumer,
+  Provider: OrganizationProvider
+} = React.createContext();
+
+let {
+  Consumer: PersonConsumer,
+  Provider: PersonProvider
+} = React.createContext();
+
+let App = () => (
+  <OrganizationProvider value="ACME Co.">
+    <PersonProvider value="Yakko">
+      <OrganizationConsumer>
+        {organization => (
+          <PersonConsumer>
+            {person => (
+              <span>{person}, {organization}</span>
+            )}
+          </PersonConsumer>
+        )}
+      </OrganizationConsumer>
+    </PersonProvider>
+  </OrganizationProvider>
+);
+
+// => Yakko, ACME Co.
+```
+
+### Modularazing Context
+
+In the "real world", you'll likely expose Contexts via ES Modules.
+
+```js
+// person_context.js
+import React from "react";
+
+let { Provider, Consumer } = React.createContext("Guest");
+
+export { Provider, Consumer };
+```
+
+```js
+// organization_context.js
+import React from "react";
+
+let { Provider, Consumer } = React.createContext();
+
+export { Provider, Consumer };
+```
+
+`Consumer`s can be imported to compose context-aware components.
+
+```jsx
+import React from "react";
+import { Consumer as PersonConsumer } from "./person_context";
+import { Consumer as OrganizationConsumer } from "./organization_context";
+
+export function ContextBizCard() {
+  return (
+    <OrganizationConsumer>
+      {organization => (
+        <PersonConsumer>
+          {person => (
+            <div className="business-card">
+              <h1>{person}</h1>
+              <h3>{organization}</h3>
+            </div>
+          )}
+        </PersonConsumer>
+      )}
+    </OrganizationConsumer>
+  );
+}
+```
+
+`Provider`s can be imported to contain and supply values to context-aware components.
+
+```jsx
+// app.js
+import { Provider as OrganizationProvider } from "./organization_context";
+import { Provider as PersonProvider } from "./person_context";
+import { ContextBizCard } from "./context_biz_card";
+
+let App = () => (
+  <OrganizationProvider value="ACME Co.">
+    <PersonProvider value="Yakko">
+      <ContextBizCard />
+    </PersonProvider>
+  </OrganizationProvider>
+);
+
+// => Yakko, ACME Co.
+```
+
 <div style="margin-bottom: 8rem"></div>
 
 &copy; 2018 Michael Chan Some Rights Reserved
