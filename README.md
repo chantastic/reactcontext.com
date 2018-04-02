@@ -6,12 +6,7 @@
 
 * [How to Read This](#how-to-read-this)
 * [Thanks](#thanks)
-
-### Todo
-
-* Modularizing Contexts
-* Examples
-* What does this mean for Redux?
+* [A "Shit" Example](#a-shit-example)
 
 ## How to Read This
 
@@ -25,6 +20,53 @@ Your mileage may vary.
 This thing was much worse (read "wrong") before [Dan Abramov](https://twitter.com/dan_abramov/) reviewed it.
 
 Thanks Dan for your patience, empathy, and clarity.
+
+## A "Shit" Example
+
+My kids are allowed tasteful explitives.
+"Shit"—for example—is fine in my house.
+My mom—however—hates the word.
+
+I tell Rock—my 7 year old—"there's nothing wrong with the word 'shit'.
+Mr. Roger's loved the word.
+But you're grandma hates it.
+So don't say it around her.
+Use 'poop' instead."
+
+"Who is Mr. Rogers?", he'll asks.
+I think he gets it.
+
+Let's implement this scenareo of "shit", Rock, and grandma's house using React's Context API (>= v16.4).
+
+```jsx
+// It's ok to say "shit" as a default.
+let ExpletiveContext = React.createContext("shit");
+
+// Some people don't like the word "shit".
+// Use a differnt word, when in their company.
+// It's good manners.
+let ContextualExclamation = () => (
+  <ExpletiveContext.Consumer>
+    {word => <span>Oh {word}!</span>}
+  </ExpletiveContext.Consumer>
+);
+
+// Grandma *hates* the word "shit".
+// Say "poop" at Grandma's house.
+let GrandmasHouse = props => (
+  <ExpletiveContext.Provider value="poop" {...props} />
+);
+
+// Go have fun at Grandma's!
+// What do you say when anything bad or exciting happens?
+let VisitToGrandmasHouse = () => (
+  <GrandmasHouse>
+    <ContextualExclamation />
+  </GrandmasHouse>
+);
+
+// => Oh poop!
+```
 
 ---
 
