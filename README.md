@@ -29,7 +29,7 @@ Don't worry, well get to **the why** after we cover **the how**.
 
 ### "Shit" is a fine word
 
-My kids are allowed tasteful explitives.
+My kids are allowed tasteful expletives.
 "Shit" is fine word in my house.
 But my mom hates the word.
 
@@ -44,7 +44,7 @@ Use 'poop' instead."
 
 I think he gets it.
 
-Let's implement this scenareo of "shit", Rock, and grandma's house using React's Context API (>= v16.4).
+Let's implement this scenario of "shit", Rock, and grandma's house using React's Context API (>= v16.4).
 
 ```jsx
 // It's ok to say "shit" as a default.
