@@ -1,0 +1,32 @@
+{
+  "name": "reactcontext.com",
+  "version": "0.0.0",
+  "description": "Some stuff on React Context",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-site": "node --experimental-modules ./build-site.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/learnreact/reactcontext.com.git"
+  },
+  "author": "Michael Chan <mijoch@gmail.com>",
+  "license": "CC-BY-NC-SA-4.0",
+  "bugs": {
+    "url": "https://github.com/learnreact/reactcontext.com/issues"
+  },
+  "homepage": "https://github.com/learnreact/reactcontext.com#readme",
+  "dependencies": {
+    "prismjs": "^1.13.0",
+    "remark": "^9.0.0",
+    "remark-autolink-headings": "^5.0.0",
+    "remark-html": "^7.0.0",
+    "remark-parse": "^5.0.0",
+    "remark-preset-lint-recommended": "^3.0.1",
+    "remark-slug": "^5.0.0",
+    "remark-toc": "^5.0.0",
+    "to-vfile": "^2.2.0",
+    "vfile-reporter": "^4.0.0"
+  }
+}

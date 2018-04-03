@@ -1,11 +1,8 @@
-# Let's talk about Context
+# Let's talk Context
 
 **THIS IS DRAFT AF. READ WITH CAUTION.**
 
-## TOC
-
-* [How to Read This](#how-to-read-this)
-* [A "shit" Example](#a-shit-example)
+## Table of Contents
 
 ## How to Read This
 
@@ -16,9 +13,14 @@ Your mileage may vary.
 
 ### Thanks
 
-This thing was much worse (read "wrong") before [Dan Abramov](https://twitter.com/dan_abramov/) reviewed it.
+This thing was much worse (read "wrong") before [Dan Abromov](https://twitter.com/dan_abramov/)'s review.
 
 Thanks Dan for your patience, empathy, and clarity.
+
+### Ask questions
+
+If you have a question about Context that isn't answered here, [open an issue](https://github.com/learnreact/reactcontext.com).
+Surely, others have the same question.
 
 ## A "Shit" Example
 
@@ -64,7 +66,7 @@ let ContextualExclamation = () => (
 let GrandmasHouse = props => (
   <ExpletiveContext.Provider value="poop">
     {props.children}
-  <ExpletiveContext.Provider />
+  </ExpletiveContext.Provider>
 );
 
 // What do you say when anything bad or exciting happens?
@@ -76,8 +78,7 @@ let VisitToGrandmasHouse = () => (
 
 // => Oh poop!
 ```
-
----
+<div style="margin-bottom: 8rem"></div>
 
 &copy; 2018 Michael Chan Some Rights Reserved
 
