@@ -13,9 +13,7 @@ import jsx from "prismjs/components/prism-jsx";
 
 let readme = fs.readFileSync("./README.md", { encoding: "UTF8" });
 
-let style = fs.readFileSync(
-  "./node_modules/prismjs/themes/prism-okaidia.css"
-);
+let style = fs.readFileSync("./node_modules/prismjs/themes/prism-okaidia.css");
 
 let template = html => `<!DOCTYPE html>
 <html lang="en">
@@ -60,6 +58,14 @@ let template = html => `<!DOCTYPE html>
 ${html}
 <script src="https://unpkg.com/prismjs@1.13.0/prism.js"></script>
 <script src="https://unpkg.com/prismjs@1.13.0/components/prism-jsx.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-56273983-7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-56273983-7');
+</script>
 </body>
 </html>
 `;
