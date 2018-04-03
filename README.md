@@ -62,7 +62,9 @@ let ContextualExclamation = () => (
 // Grandma *hates* the word "shit".
 // Say "poop" at Grandma's house.
 let GrandmasHouse = props => (
-  <ExpletiveContext.Provider value="poop" {...props} />
+  <ExpletiveContext.Provider value="poop">
+    {props.children}
+  <ExpletiveContext.Provider />
 );
 
 // What do you say when anything bad or exciting happens?
