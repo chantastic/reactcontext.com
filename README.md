@@ -5,8 +5,7 @@
 ## TOC
 
 * [How to Read This](#how-to-read-this)
-* [Thanks](#thanks)
-* [A "Shit" Example](#a-shit-example)
+* [A "shit" Example](#a-shit-example)
 
 ## How to Read This
 
@@ -15,7 +14,7 @@ This page is a supplement to the React doc on Context—found [here](https://rea
 It's a collection of my motions that helped me understand Context.
 Your mileage may vary.
 
-## Thanks
+### Thanks
 
 This thing was much worse (read "wrong") before [Dan Abramov](https://twitter.com/dan_abramov/) reviewed it.
 
@@ -23,17 +22,26 @@ Thanks Dan for your patience, empathy, and clarity.
 
 ## A "Shit" Example
 
+This is a shit example of Context.
+Shit because it uses "shit" as an illustration and because it's simplistic.
+
+Don't worry, well get to **the why** after we cover **the how**.
+
+### "Shit" is a fine word
+
 My kids are allowed tasteful explitives.
-"Shit"—for example—is fine in my house.
-My mom—however—hates the word.
+"Shit" is fine word in my house.
+But my mom hates the word.
 
 I tell Rock—my 7 year old—"there's nothing wrong with the word 'shit'.
 Mr. Roger's loved the word.
-But you're grandma hates it.
-So don't say it around her.
+Some people hate it.
+Your grandmother is one of those people.
+Don't say "shit" around her.
 Use 'poop' instead."
 
-"Who is Mr. Rogers?", he'll asks.
+"Who is Mr. Rogers?", he asks.
+
 I think he gets it.
 
 Let's implement this scenareo of "shit", Rock, and grandma's house using React's Context API (>= v16.4).
@@ -57,7 +65,6 @@ let GrandmasHouse = props => (
   <ExpletiveContext.Provider value="poop" {...props} />
 );
 
-// Go have fun at Grandma's!
 // What do you say when anything bad or exciting happens?
 let VisitToGrandmasHouse = () => (
   <GrandmasHouse>
