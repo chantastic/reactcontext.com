@@ -78,6 +78,97 @@ let VisitToGrandmasHouse = () => (
 
 // => Oh poop!
 ```
+
+## Create, Consume, and Provide Context
+
+Context is a 3-part system:
+**Create**, **Consume**, **Provide**.
+
+### Create
+
+Create context using `React.createContext`.
+
+```jsx
+import React from "react";
+
+let NameContext = React.createContext();
+```
+
+This function takes an argument.
+
+```jsx
+let NameContext = React.createContext("Guest");
+```
+
+`NameContext` comprises two components, `Consumer` and `Provider`.
+
+Let's dive into the `Consumer`.
+
+### Consume
+
+`Consumer` is a component that takes a [function as children](https://reactpatterns.com/#render-callback).
+
+Provided functions get the Context's `value` as their first argument.
+
+```jsx
+let NameContext = React.createContext("Guest");
+
+let ContextGreeting = () => (
+  <NameContext.Consumer>{value => <h1>👋 {value}!</h1>}</NameContext.Consumer>
+);
+
+// => <h1>👋 Guest!</h1>
+```
+
+In this example, `value` is the default value used to create `NameContext`.
+
+So, how do we provide Context?
+I'm always glad you ask...
+
+### Provide
+
+`Provider` is a component that takes a `value` prop and makes it available to every component in the component tree below it.
+
+```jsx
+let NameContext = React.createContext("Guest");
+
+let ContextGreeting = () => (
+  <NameContext.Provider value="Michael">
+    <NameContext.Consumer>
+      {name => <h1>👋 {name}!</h1>}
+    </NameContext.Consumer>
+  </NameContext.Provider>
+);
+
+// => <h1>👋 Michael!</h1>
+```
+
+`Providers` work where components are deeply nested.
+
+```jsx
+let NameContext = React.createContext("Guest");
+
+let ContextAwareName = () => (
+  <NameContext.Consumer>
+    {name => <h1>👋 {name}!</h1>}
+  </NameContext.Consumer>
+);
+
+let NestedContextAwareName = () => <ContextAwareName />;
+
+let DeeplyNestedContextAwareName = () => <NestedContextAwareName />;
+
+let ContextGreeting = () => (
+  <NameContext.Provider value="No Prop Drills">
+    <DeeplyNestedContextAwareName />
+  </NameContext.Provider>
+);
+
+// => <h1> Welcome No Prop Drills!</h1>
+```
+
+Prop Drills not required for assembly.
+
 <div style="margin-bottom: 8rem"></div>
 
 &copy; 2018 Michael Chan Some Rights Reserved

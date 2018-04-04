@@ -37,8 +37,8 @@ let options = {
   headings: argv.headings || 6,
   template: argv.template
     ? require(path.join(__dirname, argv.template))
-    : defaultTemplate
-  // watch: argv.watch || false
+    : defaultTemplate,
+  watch: argv.watch || false
 };
 
 function main(opts) {
@@ -75,10 +75,10 @@ function main(opts) {
 
 main(options);
 
-// if (options.watch) {
-//   fs.watchFile(options.input, () => {
-//     console.log(`Re-building ${options.input}.`);
+if (options.watch) {
+  fs.watchFile(options.input, () => {
+    console.log(`Re-building ${options.input}.`);
 
-//     main(options);
-//   });
-// }
+    main(options);
+  });
+}
