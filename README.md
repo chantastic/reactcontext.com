@@ -1,4 +1,4 @@
-# Let's talk Context
+# Let's talk about Context
 
 **THIS IS DRAFT AF. READ WITH CAUTION.**
 

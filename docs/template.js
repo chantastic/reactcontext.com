@@ -1,21 +1,19 @@
-#!/usr/local/bin/env node
+const fs = require("fs");
+const path = require("path");
 
-import remark from "remark";
-import recommended from "remark-preset-lint-recommended";
-import html from "remark-html";
-import slug from "remark-slug";
-import headings from "remark-autolink-headings";
-import toc from "remark-toc";
-import report from "vfile-reporter";
-import fs from "fs";
-import prism from "prismjs";
-import jsx from "prismjs/components/prism-jsx";
+module.exports = html => {
+  let style = fs.readFileSync(
+    path.join(
+      __dirname,
+      "..",
+      "node_modules",
+      "prismjs",
+      "themes",
+      "prism-okaidia.css"
+    )
+  );
 
-let readme = fs.readFileSync("./README.md", { encoding: "UTF8" });
-
-let style = fs.readFileSync("./node_modules/prismjs/themes/prism-okaidia.css");
-
-let template = html => `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -69,16 +67,4 @@ ${html}
 </body>
 </html>
 `;
-
-remark()
-  .use(recommended)
-  .use(slug)
-  .use(headings)
-  .use(toc, { maxDepth: 2 })
-  .use(html)
-  .process(readme, function(err, file) {
-    console.error(report(err || file));
-    fs.writeFileSync("./docs/index.html", template(String(file)), {
-      encoding: "UTF8"
-    });
-  });
+};
