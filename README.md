@@ -13,7 +13,7 @@ Your mileage may vary.
 
 ### Thanks
 
-This thing was much worse (read "wrong") before [Dan Abromov](https://twitter.com/dan_abramov/)'s review.
+This thing was much worse (read "wrong") before [Dan Abramov](https://twitter.com/dan_abramov/)'s review.
 
 Thanks Dan for your patience, empathy, and clarity.
 
