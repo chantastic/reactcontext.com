@@ -39,7 +39,7 @@ Thanks Dan for your patience, empathy, and clarity.
 This is a shit example of Context.
 Shit because it uses "shit" as an illustration and because it's simplistic.
 
-Don't worry, well get to **the why** after we cover **the how**.
+Don't worry, we'll get to **the why** after we cover **the how**.
 
 ### "Shit" is a fine word
 
@@ -65,7 +65,7 @@ Let's implement this scenario of "shit", Rock, and grandma's house using React's
 let ExpletiveContext = React.createContext("shit");
 
 // Some people don't like the word "shit".
-// Use a differnt word, when in their company.
+// Use a different word, when in their company.
 // It's good manners.
 let ContextualExclamation = () => (
   <ExpletiveContext.Consumer>
