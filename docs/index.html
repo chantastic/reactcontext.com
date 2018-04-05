@@ -174,6 +174,7 @@ pre[class*="language-"] {
 <li><a href="#a-shit-example">A "Shit" Example</a></li>
 <li><a href="#create-consume-and-provide-context">Create, Consume, and Provide Context</a></li>
 <li><a href="#provide-value">Provide value</a></li>
+<li><a href="#authoring-and-modules">Authoring and Modules</a></li>
 </ul>
 <h2 id="how-to-read-this">How to Read This</h2>
 <p>This page is a supplement to the React doc on Context—found <a href="https://reactjs.org/docs/context.html">here</a>.</p>
@@ -360,6 +361,108 @@ let App = props => (
     &#x3C;/UserContext.Provider>
   &#x3C;/div>
 );
+</code></pre>
+<h2 id="authoring-and-modules">Authoring and Modules</h2>
+<p>A Context's <code>Consumer</code> and <code>Provider</code> components can be accessed in 2 ways.</p>
+<p>The Examples above use JSX' property access syntax.
+This is the style used in official documentation.</p>
+<pre><code class="language-jsx">&#x3C;SomeContext.Provider value="some value">
+  &#x3C;Context.Consumer>
+    {value => &#x3C;span>{value}&#x3C;/span>}
+  &#x3C;/Context.Consumer>
+&#x3C;/SomeContext.Provider>
+</code></pre>
+<p>Above, you access the <code>Provider</code> and <code>Consumer</code> components through the Context object.</p>
+<p>You may prefer to use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring">object destructuring</a> to assign <code>Provider</code> and <code>Consumer</code> components to local variables.</p>
+<pre><code class="language-jsx">// Destructure your Context's Consumer and Provider
+let { Consumer, Provider } = SomeContext;
+
+&#x3C;Provider value="some value">
+  &#x3C;Consumer>{value => &#x3C;span>{value}&#x3C;/span>}&#x3C;/Consumer>
+&#x3C;/Provider>;
+</code></pre>
+<p>Take care where multiple contexts are used.</p>
+<pre><code class="language-jsx">let {
+  Consumer: OrganizationConsumer,
+  Provider: OrganizationProvider
+} = React.createContext();
+
+let {
+  Consumer: PersonConsumer,
+  Provider: PersonProvider
+} = React.createContext();
+
+let App = () => (
+  &#x3C;OrganizationProvider value="ACME Co.">
+    &#x3C;PersonProvider value="Yakko">
+      &#x3C;OrganizationConsumer>
+        {organization => (
+          &#x3C;PersonConsumer>
+            {person => (
+              &#x3C;span>{person}, {organization}&#x3C;/span>
+            )}
+          &#x3C;/PersonConsumer>
+        )}
+      &#x3C;/OrganizationConsumer>
+    &#x3C;/PersonProvider>
+  &#x3C;/OrganizationProvider>
+);
+
+// => Yakko, ACME Co.
+</code></pre>
+<h3 id="modularazing-context">Modularazing Context</h3>
+<p>In the "real world", you'll likely expose Contexts via ES Modules.</p>
+<pre><code class="language-js">// person_context.js
+import React from "react";
+
+let { Provider, Consumer } = React.createContext("Guest");
+
+export { Provider, Consumer };
+</code></pre>
+<pre><code class="language-js">// organization_context.js
+import React from "react";
+
+let { Provider, Consumer } = React.createContext();
+
+export { Provider, Consumer };
+</code></pre>
+<p><code>Consumer</code>s can be imported to compose context-aware components.</p>
+<pre><code class="language-jsx">import React from "react";
+import { Consumer as PersonConsumer } from "./person_context";
+import { Consumer as OrganizationConsumer } from "./organization_context";
+
+export function ContextBizCard() {
+  return (
+    &#x3C;OrganizationConsumer>
+      {organization => (
+        &#x3C;PersonConsumer>
+          {person => (
+            &#x3C;div className="business-card">
+              &#x3C;h1>{person}&#x3C;/h1>
+              &#x3C;h3>{organization}&#x3C;/h3>
+            &#x3C;/div>
+          )}
+        &#x3C;/PersonConsumer>
+      )}
+    &#x3C;/OrganizationConsumer>
+  );
+}
+</code></pre>
+<p><code>Provider</code>s can be imported to contain and supply values to context-aware components.</p>
+<pre><code class="language-jsx">// app.js
+import { Provider as OrganizationProvider } from "./organization_context";
+import { Provider as PersonProvider } from "./person_context";
+import { ContextBizCard } from "./context_biz_card";
+
+let App = () => (
+  &#x3C;OrganizationProvider value="ACME Co.">
+    &#x3C;PersonProvider value="Yakko">
+      &#x3C;ContextBizCard />
+    &#x3C;/PersonProvider>
+  &#x3C;/OrganizationProvider>
+);
+
+// => Yakko, ACME Co.
 </code></pre>
 <div style="margin-bottom: 8rem"></div>
 <p>© 2018 Michael Chan Some Rights Reserved</p>
