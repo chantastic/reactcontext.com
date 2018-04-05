@@ -1,6 +1,7 @@
 # Let's talk about Context
 
 **THIS IS DRAFT AF. READ WITH CAUTION.**
+[open an issue](https://github.com/learnreact/reactcontext.com) to ask for for additional sections
 
 ## Table of Contents
 
@@ -16,11 +17,6 @@ Your mileage may vary.
 This thing was much worse (read "wrong") before [Dan Abramov](https://twitter.com/dan_abramov/)'s review.
 
 Thanks Dan for your patience, empathy, and clarity.
-
-### Ask questions
-
-If you have a question about Context that isn't answered here, [open an issue](https://github.com/learnreact/reactcontext.com).
-Surely, others have the same question.
 
 ## A "Shit" Example
 
