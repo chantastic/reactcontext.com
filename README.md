@@ -165,6 +165,92 @@ let ContextGreeting = () => (
 
 Prop Drills not required for assembly.
 
+## Provide `value`
+
+A Context's `value` can take any shape.
+Here are examples of valid Contexts values, using a default `value`:
+
+```jsx
+let StringContext = React.createContext("string");
+
+let NumberContext = React.createContext(42);
+
+let FunctionContext = React.createContext(() => alert("Context function"));
+
+let ArrayContext = React.createContext(["some", "array", "elements"]);
+
+let ObjectContext = React.createContext({
+  aString: "string",
+  aNumber: 42,
+  aFunction: () => alert("Context function"),
+  anArray: ["some", "array", "elements"]
+});
+```
+
+`value` can be complex structures like React Elements, class components, and function components.
+
+```jsx
+let ReactElementContext = React.createContext(<span>React Element</span>);
+
+let FunctionalComponentContext = React.createContext(props => (
+  <span>Function Component</span>
+));
+
+let ClassComponentContext = React.createContext(
+  class extends React.Component {
+    render() {
+      return <span>Class Component</span>;
+    }
+  }
+);
+```
+
+### `value` is required on Context Providers
+
+Where a Context `Provider` is used, the `value` prop is required.
+
+```jsx
+
+// NOPE
+<SomeContext.Provider>
+</SomeContext.Provider>
+
+// YEP!
+<SomeContext.Provider value="value is a required prop">
+</SomeContext.Provider>
+```
+
+### What about the default `value` given to `createContext`?
+
+The default value given to `createContext` is used for `Consumer` components without a `Provider`.
+
+Where `Provider`s wrap their `Consumer`s, all bets are off.
+You must explicitly provide a `value`.
+
+```jsx
+let UserContext = React.createContext("Guest");
+
+let ContextGreeting = () => (
+  <UserContext.Consumer>
+    {word => <span>Hi {word}!</span>}
+  </UserContext.Consumer>
+);
+
+let App = props => (
+  <div>
+    <ContextGreeting /> {/* => Hi Guest! */}
+
+    <UserContext.Provider>
+      <ContextGreeting /> {/* => Hi ! */}
+    </UserContext.Provider>
+
+    <UserContext.Provider value="Bulbasaur">
+      <ContextGreeting /> {/* => Hi Bulbasaur! */}
+    </UserContext.Provider>
+  </div>
+);
+```
+
 <div style="margin-bottom: 8rem"></div>
 
 &copy; 2018 Michael Chan Some Rights Reserved
