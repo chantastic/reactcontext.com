@@ -22,7 +22,7 @@ module.exports = html => {
   <title>Document</title>
   <style>
   html, .root { font-size: 16px; line-height: 26px; }
-  body, .article { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 1rem; line-height: 1.625rem; max-width: 525px; margin: auto; }
+  body, .article { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 1rem; line-height: 1.625rem; /* max-width: 32em; */ margin: auto; }
   h1, .h1 { font-weight: 900; font-size: 1.9375rem; line-height: 3.25rem; margin-top: 1.625rem; margin-bottom: 3.25rem; }
   h2, .h2 { font-weight: 900; font-size: 1.5625rem; line-height: 1.625rem; margin-top: 8.125rem; margin-bottom: 1.625rem; }
   h3, .h3 { font-weight: 700; font-size: 1.25rem; line-height: 1.625rem; margin-top: 1.625rem; margin-bottom: 0rem; }
@@ -41,6 +41,8 @@ module.exports = html => {
   h3, .h3 { font-size: 1rem; text-transform: uppercase }
 
   p, ul, ol, pre, table, blockquote  { #333 }
+  
+  p { max-width: 32em }
 
   pre { overflow: auto; max-width: 100% }
   pre[class*="language-"] {
@@ -49,7 +51,7 @@ module.exports = html => {
   code { font-size: .9em }
   code:not([class*="language-"]) { background-color: #f4f4f4; padding: .25em .5em; border-radius: .125em }
 
-  body, .article { max-width: 34em; }
+  body, .article { max-width: 48em }
   @media screen and (min-width: 0) {
       body, .article { margin: 1rem }
   }

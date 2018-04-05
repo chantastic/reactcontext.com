@@ -110,7 +110,9 @@ Provided functions get the Context's `value` as their first argument.
 let NameContext = React.createContext("Guest");
 
 let ContextGreeting = () => (
-  <NameContext.Consumer>{value => <h1>👋 {value}!</h1>}</NameContext.Consumer>
+  <NameContext.Consumer>
+    {value => <h1>👋 {value}!</h1>}
+  </NameContext.Consumer>
 );
 
 // => <h1>👋 Guest!</h1>
@@ -152,7 +154,9 @@ let ContextAwareName = () => (
 
 let NestedContextAwareName = () => <ContextAwareName />;
 
-let DeeplyNestedContextAwareName = () => <NestedContextAwareName />;
+let DeeplyNestedContextAwareName = () => (
+  <NestedContextAwareName />
+);
 
 let ContextGreeting = () => (
   <NameContext.Provider value="No Prop Drills">
@@ -175,9 +179,15 @@ let StringContext = React.createContext("string");
 
 let NumberContext = React.createContext(42);
 
-let FunctionContext = React.createContext(() => alert("Context function"));
+let FunctionContext = React.createContext(() =>
+  alert("Context function")
+);
 
-let ArrayContext = React.createContext(["some", "array", "elements"]);
+let ArrayContext = React.createContext([
+  "some",
+  "array",
+  "elements"
+]);
 
 let ObjectContext = React.createContext({
   aString: "string",
@@ -190,11 +200,13 @@ let ObjectContext = React.createContext({
 `value` can be complex structures like React Elements, class components, and function components.
 
 ```jsx
-let ReactElementContext = React.createContext(<span>React Element</span>);
+let ReactElementContext = React.createContext(
+  <span>React Element</span>
+);
 
-let FunctionalComponentContext = React.createContext(props => (
-  <span>Function Component</span>
-));
+let FunctionalComponentContext = React.createContext(
+  props => <span>Function Component</span>
+);
 
 let ClassComponentContext = React.createContext(
   class extends React.Component {
@@ -210,7 +222,6 @@ let ClassComponentContext = React.createContext(
 Where a Context `Provider` is used, the `value` prop is required.
 
 ```jsx
-
 // NOPE
 <SomeContext.Provider>
 </SomeContext.Provider>
@@ -239,11 +250,9 @@ let ContextGreeting = () => (
 let App = props => (
   <div>
     <ContextGreeting /> {/* => Hi Guest! */}
-
     <UserContext.Provider>
       <ContextGreeting /> {/* => Hi ! */}
     </UserContext.Provider>
-
     <UserContext.Provider value="Bulbasaur">
       <ContextGreeting /> {/* => Hi Bulbasaur! */}
     </UserContext.Provider>
@@ -299,7 +308,9 @@ let App = () => (
         {organization => (
           <PersonConsumer>
             {person => (
-              <span>{person}, {organization}</span>
+              <span>
+                {person}, {organization}
+              </span>
             )}
           </PersonConsumer>
         )}
@@ -319,7 +330,7 @@ In the "real world", you'll likely expose Contexts via ES Modules.
 // person_context.js
 import React from "react";
 
-let { Provider, Consumer } = React.createContext("Guest");
+let { Provider, Consumer } = React.createContext();
 
 export { Provider, Consumer };
 ```

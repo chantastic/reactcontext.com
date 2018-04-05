@@ -7,7 +7,7 @@
   <title>Document</title>
   <style>
   html, .root { font-size: 16px; line-height: 26px; }
-  body, .article { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 1rem; line-height: 1.625rem; max-width: 525px; margin: auto; }
+  body, .article { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 1rem; line-height: 1.625rem; /* max-width: 32em; */ margin: auto; }
   h1, .h1 { font-weight: 900; font-size: 1.9375rem; line-height: 3.25rem; margin-top: 1.625rem; margin-bottom: 3.25rem; }
   h2, .h2 { font-weight: 900; font-size: 1.5625rem; line-height: 1.625rem; margin-top: 8.125rem; margin-bottom: 1.625rem; }
   h3, .h3 { font-weight: 700; font-size: 1.25rem; line-height: 1.625rem; margin-top: 1.625rem; margin-bottom: 0rem; }
@@ -147,6 +147,8 @@ pre[class*="language-"] {
   h3, .h3 { font-size: 1rem; text-transform: uppercase }
 
   p, ul, ol, pre, table, blockquote  { #333 }
+  
+  p { max-width: 32em }
 
   pre { overflow: auto; max-width: 100% }
   pre[class*="language-"] {
@@ -155,7 +157,7 @@ pre[class*="language-"] {
   code { font-size: .9em }
   code:not([class*="language-"]) { background-color: #f4f4f4; padding: .25em .5em; border-radius: .125em }
 
-  body, .article { max-width: 34em; }
+  body, .article { max-width: 48em }
   @media screen and (min-width: 0) {
       body, .article { margin: 1rem }
   }
@@ -249,7 +251,9 @@ let NameContext = React.createContext();
 <pre><code class="language-jsx">let NameContext = React.createContext("Guest");
 
 let ContextGreeting = () => (
-  &#x3C;NameContext.Consumer>{value => &#x3C;h1>👋 {value}!&#x3C;/h1>}&#x3C;/NameContext.Consumer>
+  &#x3C;NameContext.Consumer>
+    {value => &#x3C;h1>👋 {value}!&#x3C;/h1>}
+  &#x3C;/NameContext.Consumer>
 );
 
 // => &#x3C;h1>👋 Guest!&#x3C;/h1>
@@ -282,7 +286,9 @@ let ContextAwareName = () => (
 
 let NestedContextAwareName = () => &#x3C;ContextAwareName />;
 
-let DeeplyNestedContextAwareName = () => &#x3C;NestedContextAwareName />;
+let DeeplyNestedContextAwareName = () => (
+  &#x3C;NestedContextAwareName />
+);
 
 let ContextGreeting = () => (
   &#x3C;NameContext.Provider value="No Prop Drills">
@@ -300,9 +306,15 @@ Here are examples of valid Contexts values, using a default <code>value</code>:<
 
 let NumberContext = React.createContext(42);
 
-let FunctionContext = React.createContext(() => alert("Context function"));
+let FunctionContext = React.createContext(() =>
+  alert("Context function")
+);
 
-let ArrayContext = React.createContext(["some", "array", "elements"]);
+let ArrayContext = React.createContext([
+  "some",
+  "array",
+  "elements"
+]);
 
 let ObjectContext = React.createContext({
   aString: "string",
@@ -312,11 +324,13 @@ let ObjectContext = React.createContext({
 });
 </code></pre>
 <p><code>value</code> can be complex structures like React Elements, class components, and function components.</p>
-<pre><code class="language-jsx">let ReactElementContext = React.createContext(&#x3C;span>React Element&#x3C;/span>);
+<pre><code class="language-jsx">let ReactElementContext = React.createContext(
+  &#x3C;span>React Element&#x3C;/span>
+);
 
-let FunctionalComponentContext = React.createContext(props => (
-  &#x3C;span>Function Component&#x3C;/span>
-));
+let FunctionalComponentContext = React.createContext(
+  props => &#x3C;span>Function Component&#x3C;/span>
+);
 
 let ClassComponentContext = React.createContext(
   class extends React.Component {
@@ -351,11 +365,9 @@ let ContextGreeting = () => (
 let App = props => (
   &#x3C;div>
     &#x3C;ContextGreeting /> {/* => Hi Guest! */}
-
     &#x3C;UserContext.Provider>
       &#x3C;ContextGreeting /> {/* => Hi ! */}
     &#x3C;/UserContext.Provider>
-
     &#x3C;UserContext.Provider value="Bulbasaur">
       &#x3C;ContextGreeting /> {/* => Hi Bulbasaur! */}
     &#x3C;/UserContext.Provider>
@@ -399,7 +411,9 @@ let App = () => (
         {organization => (
           &#x3C;PersonConsumer>
             {person => (
-              &#x3C;span>{person}, {organization}&#x3C;/span>
+              &#x3C;span>
+                {person}, {organization}
+              &#x3C;/span>
             )}
           &#x3C;/PersonConsumer>
         )}
@@ -415,7 +429,7 @@ let App = () => (
 <pre><code class="language-js">// person_context.js
 import React from "react";
 
-let { Provider, Consumer } = React.createContext("Guest");
+let { Provider, Consumer } = React.createContext();
 
 export { Provider, Consumer };
 </code></pre>
