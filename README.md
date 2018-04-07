@@ -189,7 +189,7 @@ let ContextGreeting = () => (
 
 Prop Drills not required for assembly.
 
-Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-provide-context)
+Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-consume-context)
 
 ## Provide `value`
 
@@ -281,6 +281,8 @@ let App = props => (
   </div>
 );
 ```
+
+Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-provide-context)
 
 ## Authoring and Modules
 
