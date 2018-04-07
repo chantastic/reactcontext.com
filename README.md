@@ -116,6 +116,8 @@ let NameContext = React.createContext("Guest");
 
 Let's dive into the `Consumer`.
 
+Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-overview)
+
 ### Consume
 
 `Consumer` is a component that takes a [function as children](https://reactpatterns.com/#render-callback).
@@ -138,6 +140,8 @@ In this example, `value` is the default value used to create `NameContext`.
 
 So, how do we provide Context?
 I'm always glad you ask...
+
+Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-create-context)
 
 ### Provide
 
@@ -184,6 +188,8 @@ let ContextGreeting = () => (
 ```
 
 Prop Drills not required for assembly.
+
+Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-provide-context)
 
 ## Provide `value`
 
