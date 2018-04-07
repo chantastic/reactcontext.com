@@ -116,7 +116,7 @@ let NameContext = React.createContext("Guest");
 
 Let's dive into the `Consumer`.
 
-Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-overview)
+Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-create-context)
 
 ### Consume
 
