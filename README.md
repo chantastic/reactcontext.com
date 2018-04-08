@@ -91,6 +91,8 @@ let VisitToGrandmasHouse = () => (
 // => Oh poop!
 ```
 
+Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-a-shit-example)
+
 ## Create, Consume, and Provide Context
 
 Context is a 3-part system:
