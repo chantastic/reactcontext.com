@@ -4,7 +4,7 @@
 
 ## TOC
 
-* [Data Distribution, Not State Management](#data-distribution-not-state-management)
+- [Data Distribution, Not State Management](#data-distribution-not-state-management)
 
 ## Data Distribution, Not State Management
 
@@ -23,19 +23,26 @@ class StateProvider extends React.Component {
     initialState: {}
   };
 
-  state = { ...this.props.initialState };
+  update = (updater, done) => {
+    this.setState(
+      prevState => ({
+        state:
+          typeof updater === "function" ? updater(prevState.state) : updater
+      }),
+      done
+    );
+  };
 
-  update = (...args) => this.setState.apply(this, args);
+  state = {
+    state: this.props.initialState,
+    update: this.update
+  };
 
   render() {
     return (
-      <StateContext.Provider
-        value={{
-          state: this.state,
-          update: this.update
-        }}
-        {...this.props}
-      />
+      <StateContext.Provider value={this.state}>
+        {this.props.children}
+      </StateContext.Provider>
     );
   }
 }
@@ -49,9 +56,7 @@ let App = () => (
 
           <button
             type="button"
-            onClick={() =>
-              update(({ count }) => ({ count: count + 1 }))
-            }
+            onClick={() => update(({ count }) => ({ count: count + 1 }))}
           >
             increment
           </button>
@@ -60,5 +65,4 @@ let App = () => (
     </StateContext.Consumer>
   </StateProvider>
 );
-
 ```
