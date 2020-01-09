@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  html, .root { font-size: 16px; line-height: 26px; }
+  body, .article { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 1rem; line-height: 1.625rem; /* max-width: 32em; */ margin: auto; }
+  h1, .h1 { font-weight: 900; font-size: 1.9375rem; line-height: 3.25rem; margin-top: 1.625rem; margin-bottom: 3.25rem; }
+  h2, .h2 { font-weight: 900; font-size: 1.5625rem; line-height: 1.625rem; margin-top: 8.125rem; margin-bottom: 1.625rem; }
+  h3, .h3 { font-weight: 700; font-size: 1.25rem; line-height: 1.625rem; margin-top: 1.625rem; margin-bottom: 0rem; }
+  h4, .h4 { font-weight: 700; font-size: 1rem; line-height: 1.625rem; margin-top: 1.625rem; margin-bottom: 0rem; }
+  h5, .h5 { font-size: 1rem; line-height: 1.625rem; margin-top: 1.625rem; margin-bottom: 0rem; }
+  p, ul, ol, pre, table, blockquote { margin-top: 0rem; margin-bottom: 1.625rem; }
+  ul ul, ol ol, ul ol, ol ul { margin-top: 0rem; margin-bottom: 0rem; }
+  hr, .hr { border: 1px solid; margin: -1px 0; }
+  a, b, i, strong, em, small, code { line-height: 0; }
+  sub, sup { line-height: 0; position: relative; vertical-align: baseline; }
+  sup { top: -0.5em; }
+  sub { bottom: -0.25em; }
+  </style>
+  <style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: slategray;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+</style>
+  <style>
+  h3, .h3 { font-size: 1rem; text-transform: uppercase }
+
+  p, ul, ol, pre, table, blockquote  { #333 }
+  
+  p { max-width: 32em }
+
+  pre { overflow: auto; max-width: 100% }
+  pre[class*="language-"] {
+    margin-bottom: 1.625rem
+  }
+  code { font-size: .9em }
+  code:not([class*="language-"]) { background-color: #f4f4f4; padding: .25em .5em; border-radius: .125em }
+
+  body, .article { max-width: 48em }
+  @media screen and (min-width: 0) {
+      body, .article { margin: 1rem }
+  }
+  @media screen and (min-width: 34em) {
+    body, .article { margin: 2rem }
+  }
+  </style>
+  <style type="text/css">
+    /* MailChimp Form Embed Code - Horizontal Super Slim - 12/16/2015 v10.7
+    Adapted from: http://blog.heyimcat.com/universal-signup-form/ */
+
+    /* #mc_embed_signup form {text-align:center; padding:10px 0 10px 0;} */
+    .mc-field-group { display: inline-block; } /* positions input field horizontally */
+    #mc_embed_signup input.email {font-family:"Open Sans","Helvetica Neue",Arial,Helvetica,Verdana,sans-serif; font-size: 15px; border: 1px solid #ABB0B2;  -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; color: #343434; background-color: #fff; box-sizing:border-box; height:32px; padding: 0px 0.4em; display: inline-block; margin: 0; width:350px; vertical-align:top;}
+    #mc_embed_signup label {display:block; font-size:16px; padding-bottom:10px; font-weight:bold;}
+    #mc_embed_signup .clear {display: inline-block;} /* positions button horizontally in line with input */
+    #mc_embed_signup .button {font-size: 13px; border: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; letter-spacing: .03em; color: #fff; background-color: #aaa; box-sizing:border-box; height:32px; line-height:32px; padding:0 18px; display: inline-block; margin: 0; transition: all 0.23s ease-in-out 0s;}
+    #mc_embed_signup .button:hover {background-color:#777; cursor:pointer;}
+    #mc_embed_signup div#mce-responses {float:left; top:-1.4em; padding:0em .5em 0em .5em; overflow:hidden; width:90%;margin: 0 5%; clear: both;}
+    #mc_embed_signup div.response {margin:1em 0; padding:1em .5em .5em 0; font-weight:bold; float:left; top:-1.5em; z-index:1; width:80%;}
+    #mc_embed_signup #mce-error-response {display:none;}
+    #mc_embed_signup #mce-success-response {color:#529214; display:none;}
+    #mc_embed_signup label.error {display:block; float:none; width:auto; margin-left:1.05em; text-align:left; padding:.5em 0;}
+    @media (max-width: 768px) {
+        #mc_embed_signup input.email {width:100%; margin-bottom:5px;}
+        #mc_embed_signup .clear {display: block; width: 100% }
+        #mc_embed_signup .button {width: 100%; margin:0; }
+    }
+    #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+  </style>
+
+</head>
+<body>
+<h1 id="lets-talk-about-context">Let's talk about Context</h1>
+<p><strong>THIS IS DRAFT AF. READ WITH CAUTION.</strong>
+<a href="https://github.com/learnreact/reactcontext.com">open an issue</a> to ask for for additional sections</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#how-to-read-this">How to Read This</a></li>
+<li><a href="#a-shit-example">A "Shit" Example</a></li>
+<li><a href="#create-consume-and-provide-context">Create, Consume, and Provide Context</a></li>
+<li><a href="#provide-value">Provide value</a></li>
+<li><a href="#authoring-and-modules">Authoring and Modules</a></li>
+</ul>
+<h2 id="how-to-read-this">How to Read This</h2>
+<p>This page is a supplement to the React doc on Context—found <a href="https://reactjs.org/docs/context.html">here</a>.</p>
+<p>It's a collection of my motions that helped me understand Context.
+Your mileage may vary.</p>
+<h3 id="thanks">Thanks</h3>
+<p>This thing was much worse (read "wrong") before <a href="https://twitter.com/dan_abramov/">Dan Abramov</a>'s review.
+Thanks Dan for your patience, empathy, and clarity.</p>
+<h3 id="learn-other-react-stuff">Learn other React stuff</h3>
+<!-- Begin MailChimp Signup Form -->
+<div id="mc_embed_signup" style="padding-top: 1em">
+<form action="https://learnreact.us9.list-manage.com/subscribe/post?u=03b6ee2f58c8b4427c8ba9735&amp;id=f97aebbc64" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_03b6ee2f58c8b4427c8ba9735_f97aebbc64" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+<!--End mc_embed_signup-->
+<h2 id="a-shit-example">A "Shit" Example</h2>
+<p>This is a shit example of Context.
+Shit because it uses "shit" as an illustration and because it's simplistic.</p>
+<p>Don't worry, we'll get to <strong>the why</strong> after we cover <strong>the how</strong>.</p>
+<h3 id="shit-is-a-fine-word">"Shit" is a fine word</h3>
+<p>My kids are allowed tasteful expletives.
+"Shit" is fine word in my house.
+But my mom hates the word.</p>
+<p>I tell Rock—my 7 year old—"there's nothing wrong with the word 'shit'.
+Mr. Roger's loved the word.
+Some people hate it.
+Your grandmother is one of those people.
+Don't say "shit" around her.
+Use 'poop' instead."</p>
+<p>"Who is Mr. Rogers?", he asks.</p>
+<p>I think he gets it.</p>
+<p>Let's implement this scenario of "shit", Rock, and grandma's house using React's Context API (>= v16.4).</p>
+<pre><code class="language-jsx">// It's ok to say "shit" as a default.
+let ExpletiveContext = React.createContext("shit");
+
+// Some people don't like the word "shit".
+// Use a different word, when in their company.
+// It's good manners.
+let ContextualExclamation = () => (
+  &#x3C;ExpletiveContext.Consumer>
+    {word => &#x3C;span>Oh {word}!&#x3C;/span>}
+  &#x3C;/ExpletiveContext.Consumer>
+);
+
+// Grandma *hates* the word "shit".
+// Say "poop" at Grandma's house.
+let GrandmasHouse = props => (
+  &#x3C;ExpletiveContext.Provider value="poop">
+    {props.children}
+  &#x3C;/ExpletiveContext.Provider>
+);
+
+// What do you say when anything bad or exciting happens?
+let VisitToGrandmasHouse = () => (
+  &#x3C;GrandmasHouse>
+    &#x3C;ContextualExclamation />
+  &#x3C;/GrandmasHouse>
+);
+
+// => Oh poop!
+</code></pre>
+<p>Prefer video? <a href="https://learnreact.com/lessons/2018-the-context-api-a-shit-example">Watch along at learnreact.com.</a></p>
+<h2 id="create-consume-and-provide-context">Create, Consume, and Provide Context</h2>
+<p>Context is a 3-part system:
+<strong>Create</strong>, <strong>Consume</strong>, <strong>Provide</strong>.</p>
+<h3 id="create">Create</h3>
+<p>Create context using <code>React.createContext</code>.</p>
+<pre><code class="language-jsx">import React from "react";
+
+let NameContext = React.createContext();
+</code></pre>
+<p>This function takes an argument.</p>
+<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
+</code></pre>
+<p><code>NameContext</code> comprises two components, <code>Consumer</code> and <code>Provider</code>.</p>
+<p>Let's dive into the <code>Consumer</code>.</p>
+<p>Prefer video? <a href="https://learnreact.com/lessons/2018-the-context-api-create-context">Watch along at learnreact.com.</a></p>
+<h3 id="consume">Consume</h3>
+<p><code>Consumer</code> is a component that takes a <a href="https://reactpatterns.com/#render-callback">function as children</a>.</p>
+<p>Provided functions get the Context's <code>value</code> as their first argument.</p>
+<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
+
+let ContextGreeting = () => (
+  &#x3C;NameContext.Consumer>
+    {value => &#x3C;h1>👋 {value}!&#x3C;/h1>}
+  &#x3C;/NameContext.Consumer>
+);
+
+// => &#x3C;h1>👋 Guest!&#x3C;/h1>
+</code></pre>
+<p>In this example, <code>value</code> is the default value used to create <code>NameContext</code>.</p>
+<p>So, how do we provide Context?
+I'm always glad you ask...</p>
+<p>Prefer video? <a href="https://learnreact.com/lessons/2018-the-context-api-create-context">Watch along at learnreact.com.</a></p>
+<h3 id="provide">Provide</h3>
+<p><code>Provider</code> is a component that takes a <code>value</code> prop and makes it available to every component in the component tree below it.</p>
+<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
+
+let ContextGreeting = () => (
+  &#x3C;NameContext.Provider value="Michael">
+    &#x3C;NameContext.Consumer>
+      {name => &#x3C;h1>👋 {name}!&#x3C;/h1>}
+    &#x3C;/NameContext.Consumer>
+  &#x3C;/NameContext.Provider>
+);
+
+// => &#x3C;h1>👋 Michael!&#x3C;/h1>
+</code></pre>
+<p><code>Providers</code> work where components are deeply nested.</p>
+<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
+
+let ContextAwareName = () => (
+  &#x3C;NameContext.Consumer>
+    {name => &#x3C;h1>👋 {name}!&#x3C;/h1>}
+  &#x3C;/NameContext.Consumer>
+);
+
+let NestedContextAwareName = () => &#x3C;ContextAwareName />;
+
+let DeeplyNestedContextAwareName = () => (
+  &#x3C;NestedContextAwareName />
+);
+
+let ContextGreeting = () => (
+  &#x3C;NameContext.Provider value="No Prop Drills">
+    &#x3C;DeeplyNestedContextAwareName />
+  &#x3C;/NameContext.Provider>
+);
+
+// => &#x3C;h1> Welcome No Prop Drills!&#x3C;/h1>
+</code></pre>
+<p>Prop Drills not required for assembly.</p>
+<p>Prefer video? <a href="https://learnreact.com/lessons/2018-the-context-api-consume-context">Watch along at learnreact.com.</a></p>
+<h2 id="provide-value">Provide <code>value</code></h2>
+<p>A Context's <code>value</code> can take any shape.
+Here are examples of valid Contexts values, using a default <code>value</code>:</p>
+<pre><code class="language-jsx">let StringContext = React.createContext("string");
+
+let NumberContext = React.createContext(42);
+
+let FunctionContext = React.createContext(() =>
+  alert("Context function")
+);
+
+let ArrayContext = React.createContext([
+  "some",
+  "array",
+  "elements"
+]);
+
+let ObjectContext = React.createContext({
+  aString: "string",
+  aNumber: 42,
+  aFunction: () => alert("Context function"),
+  anArray: ["some", "array", "elements"]
+});
+</code></pre>
+<p><code>value</code> can be complex structures like React Elements, class components, and function components.</p>
+<pre><code class="language-jsx">let ReactElementContext = React.createContext(
+  &#x3C;span>React Element&#x3C;/span>
+);
+
+let FunctionalComponentContext = React.createContext(
+  props => &#x3C;span>Function Component&#x3C;/span>
+);
+
+let ClassComponentContext = React.createContext(
+  class extends React.Component {
+    render() {
+      return &#x3C;span>Class Component&#x3C;/span>;
+    }
+  }
+);
+</code></pre>
+<h3 id="value-is-required-on-context-providers"><code>value</code> is required on Context Providers</h3>
+<p>Where a Context <code>Provider</code> is used, the <code>value</code> prop is required.</p>
+<pre><code class="language-jsx">// NOPE
+&#x3C;SomeContext.Provider>
+&#x3C;/SomeContext.Provider>
+
+// YEP!
+&#x3C;SomeContext.Provider value="value is a required prop">
+&#x3C;/SomeContext.Provider>
+</code></pre>
+<h3 id="what-about-the-default-value-given-to-createcontext">What about the default <code>value</code> given to <code>createContext</code>?</h3>
+<p>The default value given to <code>createContext</code> is used for <code>Consumer</code> components without a <code>Provider</code>.</p>
+<p>Where <code>Provider</code>s wrap their <code>Consumer</code>s, all bets are off.
+You must explicitly provide a <code>value</code>.</p>
+<pre><code class="language-jsx">let UserContext = React.createContext("Guest");
+
+let ContextGreeting = () => (
+  &#x3C;UserContext.Consumer>
+    {word => &#x3C;span>Hi {word}!&#x3C;/span>}
+  &#x3C;/UserContext.Consumer>
+);
+
+let App = props => (
+  &#x3C;div>
+    &#x3C;ContextGreeting /> {/* => Hi Guest! */}
+    &#x3C;UserContext.Provider>
+      &#x3C;ContextGreeting /> {/* => Hi ! */}
+    &#x3C;/UserContext.Provider>
+    &#x3C;UserContext.Provider value="Bulbasaur">
+      &#x3C;ContextGreeting /> {/* => Hi Bulbasaur! */}
+    &#x3C;/UserContext.Provider>
+  &#x3C;/div>
+);
+</code></pre>
+<p>Prefer video? <a href="https://learnreact.com/lessons/2018-the-context-api-provide-context">Watch along at learnreact.com.</a></p>
+<h2 id="authoring-and-modules">Authoring and Modules</h2>
+<p>A Context's <code>Consumer</code> and <code>Provider</code> components can be accessed in 2 ways.</p>
+<p>The Examples above use JSX' property access syntax.
+This is the style used in official documentation.</p>
+<pre><code class="language-jsx">&#x3C;SomeContext.Provider value="some value">
+  &#x3C;Context.Consumer>
+    {value => &#x3C;span>{value}&#x3C;/span>}
+  &#x3C;/Context.Consumer>
+&#x3C;/SomeContext.Provider>
+</code></pre>
+<p>Above, you access the <code>Provider</code> and <code>Consumer</code> components through the Context object.</p>
+<p>You may prefer to use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring">object destructuring</a> to assign <code>Provider</code> and <code>Consumer</code> components to local variables.</p>
+<pre><code class="language-jsx">// Destructure your Context's Consumer and Provider
+let { Consumer, Provider } = SomeContext;
+
+&#x3C;Provider value="some value">
+  &#x3C;Consumer>{value => &#x3C;span>{value}&#x3C;/span>}&#x3C;/Consumer>
+&#x3C;/Provider>;
+</code></pre>
+<p>Take care where multiple contexts are used.</p>
+<pre><code class="language-jsx">let {
+  Consumer: OrganizationConsumer,
+  Provider: OrganizationProvider
+} = React.createContext();
+
+let {
+  Consumer: PersonConsumer,
+  Provider: PersonProvider
+} = React.createContext();
+
+let App = () => (
+  &#x3C;OrganizationProvider value="ACME Co.">
+    &#x3C;PersonProvider value="Yakko">
+      &#x3C;OrganizationConsumer>
+        {organization => (
+          &#x3C;PersonConsumer>
+            {person => (
+              &#x3C;span>
+                {person}, {organization}
+              &#x3C;/span>
+            )}
+          &#x3C;/PersonConsumer>
+        )}
+      &#x3C;/OrganizationConsumer>
+    &#x3C;/PersonProvider>
+  &#x3C;/OrganizationProvider>
+);
+
+// => Yakko, ACME Co.
+</code></pre>
+<h3 id="modularazing-context">Modularazing Context</h3>
+<p>In the "real world", you'll likely expose Contexts via ES Modules.</p>
+<pre><code class="language-js">// person_context.js
+import React from "react";
+
+let { Provider, Consumer } = React.createContext();
+
+export { Provider, Consumer };
+</code></pre>
+<pre><code class="language-js">// organization_context.js
+import React from "react";
+
+let { Provider, Consumer } = React.createContext();
+
+export { Provider, Consumer };
+</code></pre>
+<p><code>Consumer</code>s can be imported to compose context-aware components.</p>
+<pre><code class="language-jsx">import React from "react";
+import { Consumer as PersonConsumer } from "./person_context";
+import { Consumer as OrganizationConsumer } from "./organization_context";
+
+export function ContextBizCard() {
+  return (
+    &#x3C;OrganizationConsumer>
+      {organization => (
+        &#x3C;PersonConsumer>
+          {person => (
+            &#x3C;div className="business-card">
+              &#x3C;h1>{person}&#x3C;/h1>
+              &#x3C;h3>{organization}&#x3C;/h3>
+            &#x3C;/div>
+          )}
+        &#x3C;/PersonConsumer>
+      )}
+    &#x3C;/OrganizationConsumer>
+  );
+}
+</code></pre>
+<p><code>Provider</code>s can be imported to contain and supply values to context-aware components.</p>
+<pre><code class="language-jsx">// app.js
+import { Provider as OrganizationProvider } from "./organization_context";
+import { Provider as PersonProvider } from "./person_context";
+import { ContextBizCard } from "./context_biz_card";
+
+let App = () => (
+  &#x3C;OrganizationProvider value="ACME Co.">
+    &#x3C;PersonProvider value="Yakko">
+      &#x3C;ContextBizCard />
+    &#x3C;/PersonProvider>
+  &#x3C;/OrganizationProvider>
+);
+
+// => Yakko, ACME Co.
+</code></pre>
+<div style="margin-bottom: 8rem"></div>
+<p>© 2018 Michael Chan Some Rights Reserved</p>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+
+<script src="https://unpkg.com/prismjs@1.13.0/prism.js"></script>
+<script src="https://unpkg.com/prismjs@1.13.0/components/prism-jsx.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-56273983-7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-56273983-7');
+</script>
+</body>
+</html>
