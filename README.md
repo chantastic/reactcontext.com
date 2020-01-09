@@ -479,6 +479,18 @@ let App = () => (
 // => Yakko, ACME Co.
 ```
 
+## A Mental Model for Context
+
+Props are like wires.
+Props are used to "connect" data between components.
+Like wires, the components have to be "touching".
+Meaning that component thats hold data have to render components that need it.
+
+Context is like a wireless — like infrared.
+Context is used to send a "signal".
+Like wireless, components have to be "in range" — children of a `Context.Provider` — to recieve the signal.
+Components can observe that signal with a `Context.Consumer`.
+
 <div style="margin-bottom: 8rem"></div>
 
 &copy; 2018 Michael Chan Some Rights Reserved
