@@ -493,6 +493,42 @@ Components can observe that signal with a `Context.Consumer`.
 
 <div style="margin-bottom: 8rem"></div>
 
+## `useContext` Hook
+
+As of [v16.8](https://reactjs.org/blog/2019/02/06/react-v16.8.0.html) React provides a [Hooks API for consuming context](https://reactjs.org/docs/hooks-reference.html#usecontext).
+
+The main difference between the `Context.Consumer` component and the `useContext` Hook is this:  
+The `useContext` Hook requires a component boundary;  
+`Context.Consumer` can be used inline.
+
+Here's a re-implementation of [A "Shit" Example](#a-shit-example) using hooks:
+
+```jsx
+import React from "react";
+
+const ExpletiveContext = React.createContext("shit");
+
+function ContextualExclamation() {
+  let word = React.useContext(ExpletiveContext);
+
+  return (
+    <ExpletiveContext.Consumer>
+      {word}
+    </ExpletiveContext.Consumer>
+  );
+}
+
+function VisitGrandmasHouse() {
+  return (
+    <ExpletiveContext.Provider value="poop">
+      <ContextualExclamation />
+    </ExpletiveContext.Provider>
+  );
+}
+```
+
+<div style="margin-bottom: 8rem"></div>
+
 &copy; 2018 Michael Chan Some Rights Reserved
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
