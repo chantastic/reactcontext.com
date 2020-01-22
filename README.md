@@ -529,6 +529,43 @@ function VisitGrandmasHouse() {
 
 <div style="margin-bottom: 8rem"></div>
 
+## `static contextType` Hook
+
+Class components can consume one Context directly using `static contextType`.
+
+This differs from `Context.Consumer` in that it happens in the component definition and it can only consume one Context.  
+Access to context is done thru the component instance.
+
+Here's a re-implementation of [A "Shit" Example](#a-shit-example) using `static contextType`:
+
+```jsx
+import React from "react";
+
+const ExpletiveContext = React.createContext("shit");
+
+class ContextualExclamation extends React.Component {
+  static contextType = ExpletiveContext;
+
+  render() {
+    return (
+      <ExpletiveContext.Consumer>
+        {this.context.word}
+      </ExpletiveContext.Consumer>
+    );
+  }
+}
+
+function VisitGrandmasHouse() {
+  return (
+    <ExpletiveContext.Provider value="poop">
+      <ContextualExclamation />
+    </ExpletiveContext.Provider>
+  );
+}
+```
+
+<div style="margin-bottom: 8rem"></div>
+
 &copy; 2018 Michael Chan Some Rights Reserved
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
