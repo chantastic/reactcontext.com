@@ -348,6 +348,41 @@ let App = () => (
 // => Yakko, ACME Co.
 ```
 
+## Cascading Context
+
+Context cascades.
+
+Consumers use the value from the nearest `Context.Provider`.  
+Where none is present, the `createContext` default value is used.
+
+```jsx
+let { Provider, Consumer } = React.createContext(
+  "global default"
+);
+
+function App() {
+  return (
+    <>
+      <Provider value="outer">
+        <Consumer>
+          {value => <div>{value}</div> /* "outer" */}
+        </Consumer>
+
+        <Provider value="inner">
+          <Consumer>
+            {value => <div>{value}</div> /* "inner" */}
+          </Consumer>
+        </Provider>
+      </Provider>
+
+      <Consumer>
+        {value => <div>{value}</div> /* "global default" */}
+      </Consumer>
+    </>
+  );
+}
+```
+
 ## Data Distribution, Not State Management
 
 Context makes it possible to distribute data to every component in a component tree.
