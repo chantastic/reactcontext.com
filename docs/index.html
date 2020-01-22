@@ -205,8 +205,11 @@ pre[class*="language-"] {
 <li><a href="#create-consume-and-provide-context">Create, Consume, and Provide Context</a></li>
 <li><a href="#provide-value">Provide value</a></li>
 <li><a href="#authoring-and-modules">Authoring and Modules</a></li>
+<li><a href="#cascading-context">Cascading Context</a></li>
 <li><a href="#data-distribution-not-state-management">Data Distribution, Not State Management</a></li>
 <li><a href="#a-mental-model-for-context">A Mental Model for Context</a></li>
+<li><a href="#usecontext-hook">useContext Hook</a></li>
+<li><a href="#static-contexttype-hook">static contextType Hook</a></li>
 </ul>
 <h2 id="how-to-read-this"><a href="#how-to-read-this" aria-hidden="true"><span class="icon icon-link"></span></a>How to Read This</h2>
 <p>This page is a supplement to the React doc on Context—found <a href="https://reactjs.org/docs/context.html">here</a>.</p>
@@ -473,6 +476,36 @@ let App = () => (
 
 // => Yakko, ACME Co.
 </code></pre>
+<h2 id="cascading-context"><a href="#cascading-context" aria-hidden="true"><span class="icon icon-link"></span></a>Cascading Context</h2>
+<p>Context cascades.</p>
+<p>Consumers use the value from the nearest <code>Context.Provider</code>.<br>
+Where none is present, the <code>createContext</code> default value is used.</p>
+<pre><code class="language-jsx">let { Provider, Consumer } = React.createContext(
+  "global default"
+);
+
+function App() {
+  return (
+    &#x3C;>
+      &#x3C;Provider value="outer">
+        &#x3C;Consumer>
+          {value => &#x3C;div>{value}&#x3C;/div> /* "outer" */}
+        &#x3C;/Consumer>
+
+        &#x3C;Provider value="inner">
+          &#x3C;Consumer>
+            {value => &#x3C;div>{value}&#x3C;/div> /* "inner" */}
+          &#x3C;/Consumer>
+        &#x3C;/Provider>
+      &#x3C;/Provider>
+
+      &#x3C;Consumer>
+        {value => &#x3C;div>{value}&#x3C;/div> /* "global default" */}
+      &#x3C;/Consumer>
+    &#x3C;/>
+  );
+}
+</code></pre>
 <h2 id="data-distribution-not-state-management"><a href="#data-distribution-not-state-management" aria-hidden="true"><span class="icon icon-link"></span></a>Data Distribution, Not State Management</h2>
 <p>Context makes it possible to distribute data to every component in a component tree.</p>
 <p>It's used to distribute data, not manage state.
@@ -595,6 +628,65 @@ Meaning that component thats hold data have to render components that need it.</
 Context is used to send a "signal".
 Like wireless, components have to be "in range" — children of a <code>Context.Provider</code> — to recieve the signal.
 Components can observe that signal with a <code>Context.Consumer</code>.</p>
+<div style="margin-bottom: 8rem"></div>
+<h2 id="usecontext-hook"><a href="#usecontext-hook" aria-hidden="true"><span class="icon icon-link"></span></a><code>useContext</code> Hook</h2>
+<p>As of <a href="https://reactjs.org/blog/2019/02/06/react-v16.8.0.html">v16.8</a> React provides a <a href="https://reactjs.org/docs/hooks-reference.html#usecontext">Hooks API for consuming context</a>.</p>
+<p>The main difference between the <code>Context.Consumer</code> component and the <code>useContext</code> Hook is this:<br>
+The <code>useContext</code> Hook requires a component boundary;<br>
+<code>Context.Consumer</code> can be used inline.</p>
+<p>Here's a re-implementation of <a href="#a-shit-example">A "Shit" Example</a> using hooks:</p>
+<pre><code class="language-jsx">import React from "react";
+
+const ExpletiveContext = React.createContext("shit");
+
+function ContextualExclamation() {
+  let word = React.useContext(ExpletiveContext);
+
+  return (
+    &#x3C;ExpletiveContext.Consumer>
+      {word}
+    &#x3C;/ExpletiveContext.Consumer>
+  );
+}
+
+function VisitGrandmasHouse() {
+  return (
+    &#x3C;ExpletiveContext.Provider value="poop">
+      &#x3C;ContextualExclamation />
+    &#x3C;/ExpletiveContext.Provider>
+  );
+}
+</code></pre>
+<div style="margin-bottom: 8rem"></div>
+<h2 id="static-contexttype-hook"><a href="#static-contexttype-hook" aria-hidden="true"><span class="icon icon-link"></span></a><code>static contextType</code> Hook</h2>
+<p>Class components can consume one Context directly using <code>static contextType</code>.</p>
+<p>This differs from <code>Context.Consumer</code> in that it happens in the component definition and it can only consume one Context.<br>
+Access to context is done thru the component instance.</p>
+<p>Here's a re-implementation of <a href="#a-shit-example">A "Shit" Example</a> using <code>static contextType</code>:</p>
+<pre><code class="language-jsx">import React from "react";
+
+const ExpletiveContext = React.createContext("shit");
+
+class ContextualExclamation extends React.Component {
+  static contextType = ExpletiveContext;
+
+  render() {
+    return (
+      &#x3C;ExpletiveContext.Consumer>
+        {this.context.word}
+      &#x3C;/ExpletiveContext.Consumer>
+    );
+  }
+}
+
+function VisitGrandmasHouse() {
+  return (
+    &#x3C;ExpletiveContext.Provider value="poop">
+      &#x3C;ContextualExclamation />
+    &#x3C;/ExpletiveContext.Provider>
+  );
+}
+</code></pre>
 <div style="margin-bottom: 8rem"></div>
 <p>© 2018 Michael Chan Some Rights Reserved</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
