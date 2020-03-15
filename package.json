@@ -19,7 +19,7 @@
   "homepage": "https://github.com/learnreact/reactcontext.com#readme",
   "dependencies": {
     "chalk": "^2.4.2",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.2",
     "pretty-bytes": "^4.0.2",
     "prismjs": "^1.18.0",
     "remark": "^9.0.0",
