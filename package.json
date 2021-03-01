@@ -21,7 +21,7 @@
     "chalk": "^2.4.2",
     "minimist": "^1.2.0",
     "pretty-bytes": "^4.0.2",
-    "prismjs": "^1.18.0",
+    "prismjs": "^1.23.0",
     "remark": "^9.0.0",
     "remark-autolink-headings": "^5.2.1",
     "remark-html": "^7.0.0",
