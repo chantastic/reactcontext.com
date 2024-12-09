@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.0.3"
+    "astro": "^5.0.3",
+    "astro-expressive-code": "^0.38.3"
   }
 }
