@@ -195,30 +195,21 @@ pre[class*="language-"] {
 
 </head>
 <body>
-<h1 id="lets-talk-about-context"><a href="#lets-talk-about-context" aria-hidden="true"><span class="icon icon-link"></span></a>Let's talk about Context</h1>
-<p><strong>THIS IS DRAFT AF. READ WITH CAUTION.</strong>
-<a href="https://github.com/learnreact/reactcontext.com">open an issue</a> to ask for for additional sections</p>
-<h2 id="table-of-contents"><a href="#table-of-contents" aria-hidden="true"><span class="icon icon-link"></span></a>Table of Contents</h2>
+<h1 id="react-context"><a href="#react-context" aria-hidden="true"><span class="icon icon-link"></span></a>React Context</h1>
+<p>Updated for React 19.</p>
+<h2 id="table-of-contents"><a href="#table-of-contents" aria-hidden="true"><span class="icon icon-link"></span></a>Table of contents</h2>
 <ul>
-<li><a href="#how-to-read-this">How to Read This</a></li>
-<li><a href="#a-shit-example">A "Shit" Example</a></li>
-<li><a href="#create-consume-and-provide-context">Create, Consume, and Provide Context</a></li>
+<li><a href="#learn-other-react-stuff-good-too">Learn other React stuff good too</a></li>
+<li><a href="#a-shit-example">A "shit" example</a></li>
+<li><a href="#create-use-and-provide-context">Create, use, and provide context</a></li>
 <li><a href="#provide-value">Provide value</a></li>
 <li><a href="#authoring-and-modules">Authoring and Modules</a></li>
 <li><a href="#cascading-context">Cascading Context</a></li>
 <li><a href="#data-distribution-not-state-management">Data Distribution, Not State Management</a></li>
-<li><a href="#a-mental-model-for-context">A Mental Model for Context</a></li>
-<li><a href="#usecontext-hook">useContext Hook</a></li>
-<li><a href="#static-contexttype-hook">static contextType Hook</a></li>
+<li><a href="#a-mental-model-for-context">A mental model for context</a></li>
+<li><a href="#what-is-legacy-context">What is Legacy Context?</a></li>
 </ul>
-<h2 id="how-to-read-this"><a href="#how-to-read-this" aria-hidden="true"><span class="icon icon-link"></span></a>How to Read This</h2>
-<p>This page is a supplement to the React doc on Context—found <a href="https://reactjs.org/docs/context.html">here</a>.</p>
-<p>It's a collection of my motions that helped me understand Context.
-Your mileage may vary.</p>
-<h3 id="thanks"><a href="#thanks" aria-hidden="true"><span class="icon icon-link"></span></a>Thanks</h3>
-<p>This thing was much worse (read "wrong") before <a href="https://twitter.com/dan_abramov/">Dan Abramov</a>'s review.
-Thanks Dan for your patience, empathy, and clarity.</p>
-<h3 id="learn-other-react-stuff"><a href="#learn-other-react-stuff" aria-hidden="true"><span class="icon icon-link"></span></a>Learn other React stuff</h3>
+<h2 id="learn-other-react-stuff-good-too"><a href="#learn-other-react-stuff-good-too" aria-hidden="true"><span class="icon icon-link"></span></a>Learn other React stuff good too</h2>
 <!-- Begin MailChimp Signup Form -->
 <div id="mc_embed_signup" style="padding-top: 1em">
 <form action="https://learnreact.us9.list-manage.com/subscribe/post?u=03b6ee2f58c8b4427c8ba9735&amp;id=f97aebbc64" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
@@ -232,126 +223,70 @@ Thanks Dan for your patience, empathy, and clarity.</p>
 </form>
 </div>
 <!--End mc_embed_signup-->
-<h2 id="a-shit-example"><a href="#a-shit-example" aria-hidden="true"><span class="icon icon-link"></span></a>A "Shit" Example</h2>
-<p>This is a shit example of Context.
-Shit because it uses "shit" as an illustration and because it's simplistic.</p>
-<p>Don't worry, we'll get to <strong>the why</strong> after we cover <strong>the how</strong>.</p>
-<h3 id="shit-is-a-fine-word"><a href="#shit-is-a-fine-word" aria-hidden="true"><span class="icon icon-link"></span></a>"Shit" is a fine word</h3>
-<p>My kids are allowed tasteful expletives.
-"Shit" is fine word in my house.
+<h2 id="a-shit-example"><a href="#a-shit-example" aria-hidden="true"><span class="icon icon-link"></span></a>A "shit" example</h2>
+<p><em>Shit</em> is fine word in my house.<br>
 But my mom hates the word.</p>
-<p>I tell Rock—my 7 year old—"there's nothing wrong with the word 'shit'.
-Mr. Roger's loved the word.
-Some people hate it.
-Your grandmother is one of those people.
-Don't say "shit" around her.
-Use 'poop' instead."</p>
-<p>"Who is Mr. Rogers?", he asks.</p>
-<p>I think he gets it.</p>
-<p>Let's implement this scenario of "shit", Rock, and grandma's house using React's Context API (>= v16.4).</p>
-<pre><code class="language-jsx">// It's ok to say "shit" as a default.
+<p>So I tell my kids to use another word when around grandma.  </p>
+<p>The way we adapt language to our company is a great context for <code>Context</code>.</p>
+<pre><code class="language-jsx">// It's ok to say "shit" as a default
 let ExpletiveContext = React.createContext("shit");
 
-// Some people don't like the word "shit".
-// Use a different word, when in their company.
-// It's good manners.
-let ContextualExclamation = () => (
-  &#x3C;ExpletiveContext.Consumer>
-    {word => &#x3C;span>Oh {word}!&#x3C;/span>}
-  &#x3C;/ExpletiveContext.Consumer>
-);
+// Context is important communicating
+function ContextualExclamation() {
+  let word = React.use(ExpletiveContext);
+  return &#x3C;span>Oh {word}!&#x3C;/span>;
+}
 
-// Grandma *hates* the word "shit".
-// Say "poop" at Grandma's house.
+// When at Grandma's house, say "snap" as an expletive
 let GrandmasHouse = props => (
-  &#x3C;ExpletiveContext.Provider value="poop">
+  &#x3C;ExpletiveContext value="snap">
     {props.children}
-  &#x3C;/ExpletiveContext.Provider>
+  &#x3C;/ExpletiveContext>
 );
 
-// What do you say when anything bad or exciting happens?
+// => &#x3C;span>Oh snap!&#x3C;/span>
 let VisitToGrandmasHouse = () => (
   &#x3C;GrandmasHouse>
     &#x3C;ContextualExclamation />
   &#x3C;/GrandmasHouse>
 );
-
-// => Oh poop!
 </code></pre>
-<p>Prefer video? <a href="https://learnreact.com/lessons/2018-the-context-api-a-shit-example">Watch along at learnreact.com.</a></p>
-<h2 id="create-consume-and-provide-context"><a href="#create-consume-and-provide-context" aria-hidden="true"><span class="icon icon-link"></span></a>Create, Consume, and Provide Context</h2>
+<h2 id="create-use-and-provide-context"><a href="#create-use-and-provide-context" aria-hidden="true"><span class="icon icon-link"></span></a>Create, use, and provide context</h2>
 <p>Context is a 3-part system:
-<strong>Create</strong>, <strong>Consume</strong>, <strong>Provide</strong>.</p>
+<strong>Create</strong>, <strong>Use</strong>, <strong>Provide</strong>.</p>
 <h3 id="create"><a href="#create" aria-hidden="true"><span class="icon icon-link"></span></a>Create</h3>
-<p>Create context using <code>React.createContext</code>.</p>
-<pre><code class="language-jsx">import React from "react";
-
-let NameContext = React.createContext();
+<p>Create context with <code>React.createContext</code>.</p>
+<pre><code class="language-jsx">let NameContext = React.createContext();
 </code></pre>
-<p>This function takes an argument.</p>
+<p>This function takes an optional argument.</p>
 <pre><code class="language-jsx">let NameContext = React.createContext("Guest");
 </code></pre>
-<p><code>NameContext</code> comprises two components, <code>Consumer</code> and <code>Provider</code>.</p>
-<p>Let's dive into the <code>Consumer</code>.</p>
-<p>Prefer video? <a href="https://learnreact.com/lessons/2018-the-context-api-create-context">Watch along at learnreact.com.</a></p>
-<h3 id="consume"><a href="#consume" aria-hidden="true"><span class="icon icon-link"></span></a>Consume</h3>
-<p><code>Consumer</code> is a component that takes a <a href="https://reactpatterns.com/#render-callback">function as children</a>.</p>
-<p>Provided functions get the Context's <code>value</code> as their first argument.</p>
-<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
+<h3 id="use"><a href="#use" aria-hidden="true"><span class="icon icon-link"></span></a>Use</h3>
+<p>Use context with <code>React.use</code>.</p>
+<pre><code class="language-jsx">function ContextualGreeting() {
+  let name = React.use(NameContext);
 
-let ContextGreeting = () => (
-  &#x3C;NameContext.Consumer>
-    {value => &#x3C;h1>👋 {value}!&#x3C;/h1>}
-  &#x3C;/NameContext.Consumer>
-);
-
-// => &#x3C;h1>👋 Guest!&#x3C;/h1>
+  return &#x3C;h1>👋 {name}!&#x3C;/h1>;
+}
 </code></pre>
-<p>In this example, <code>value</code> is the default value used to create <code>NameContext</code>.</p>
-<p>So, how do we provide Context?
-I'm always glad you ask...</p>
-<p>Prefer video? <a href="https://learnreact.com/lessons/2018-the-context-api-create-context">Watch along at learnreact.com.</a></p>
 <h3 id="provide"><a href="#provide" aria-hidden="true"><span class="icon icon-link"></span></a>Provide</h3>
-<p><code>Provider</code> is a component that takes a <code>value</code> prop and makes it available to every component in the component tree below it.</p>
+<p>Provide contexnt "rendering" the returned Context element. Then provide <code>value</code> as a prop.</p>
 <pre><code class="language-jsx">let NameContext = React.createContext("Guest");
 
-let ContextGreeting = () => (
-  &#x3C;NameContext.Provider value="Michael">
-    &#x3C;NameContext.Consumer>
-      {name => &#x3C;h1>👋 {name}!&#x3C;/h1>}
-    &#x3C;/NameContext.Consumer>
-  &#x3C;/NameContext.Provider>
-);
+function App() {
+  let user = { first_name: "Chan" };
 
-// => &#x3C;h1>👋 Michael!&#x3C;/h1>
+  return (
+    &#x3C;NameContext value={user.first_name}>
+      &#x3C;ContextualGreeting />
+    &#x3C;/NameContext>
+  );
+}
+
+// => &#x3C;h1>👋 Chan!&#x3C;/h1>
 </code></pre>
-<p><code>Providers</code> work where components are deeply nested.</p>
-<pre><code class="language-jsx">let NameContext = React.createContext("Guest");
-
-let ContextAwareName = () => (
-  &#x3C;NameContext.Consumer>
-    {name => &#x3C;h1>👋 {name}!&#x3C;/h1>}
-  &#x3C;/NameContext.Consumer>
-);
-
-let NestedContextAwareName = () => &#x3C;ContextAwareName />;
-
-let DeeplyNestedContextAwareName = () => (
-  &#x3C;NestedContextAwareName />
-);
-
-let ContextGreeting = () => (
-  &#x3C;NameContext.Provider value="No Prop Drills">
-    &#x3C;DeeplyNestedContextAwareName />
-  &#x3C;/NameContext.Provider>
-);
-
-// => &#x3C;h1> Welcome No Prop Drills!&#x3C;/h1>
-</code></pre>
-<p>Prop Drills not required for assembly.</p>
-<p>Prefer video? <a href="https://learnreact.com/lessons/2018-the-context-api-consume-context">Watch along at learnreact.com.</a></p>
 <h2 id="provide-value"><a href="#provide-value" aria-hidden="true"><span class="icon icon-link"></span></a>Provide <code>value</code></h2>
-<p>A Context's <code>value</code> can take any shape.
+<p>A Context's <code>value</code> can take any shape.<br>
 Here are examples of valid Contexts values, using a default <code>value</code>:</p>
 <pre><code class="language-jsx">let StringContext = React.createContext("string");
 
@@ -373,6 +308,15 @@ let ObjectContext = React.createContext({
   aFunction: () => alert("Context function"),
   anArray: ["some", "array", "elements"]
 });
+
+let MapAndSetContext = React.createContext(
+  new Map([
+    [
+      'Taylor Swift',
+      new Set(['Tortured Poets Department', 'Midnights', 'Evermore']),
+    ],
+  ])
+);
 </code></pre>
 <p><code>value</code> can be complex structures like React Elements, class components, and function components.</p>
 <pre><code class="language-jsx">let ReactElementContext = React.createContext(
@@ -382,24 +326,16 @@ let ObjectContext = React.createContext({
 let FunctionalComponentContext = React.createContext(
   props => &#x3C;span>Function Component&#x3C;/span>
 );
-
-let ClassComponentContext = React.createContext(
-  class extends React.Component {
-    render() {
-      return &#x3C;span>Class Component&#x3C;/span>;
-    }
-  }
-);
 </code></pre>
 <h3 id="value-is-required-on-context-providers"><a href="#value-is-required-on-context-providers" aria-hidden="true"><span class="icon icon-link"></span></a><code>value</code> is required on Context Providers</h3>
-<p>Where a Context <code>Provider</code> is used, the <code>value</code> prop is required.</p>
+<p>Where a Context is provided, the <code>value</code> prop is required.</p>
 <pre><code class="language-jsx">// NOPE
-&#x3C;SomeContext.Provider>
-&#x3C;/SomeContext.Provider>
+&#x3C;SomeContext>
+&#x3C;/SomeContext>
 
 // YEP!
-&#x3C;SomeContext.Provider value="value is a required prop">
-&#x3C;/SomeContext.Provider>
+&#x3C;SomeContext value="value is a required prop">
+&#x3C;/SomeContext>
 </code></pre>
 <h3 id="what-about-the-default-value-given-to-createcontext"><a href="#what-about-the-default-value-given-to-createcontext" aria-hidden="true"><span class="icon icon-link"></span></a>What about the default <code>value</code> given to <code>createContext</code>?</h3>
 <p>The default value given to <code>createContext</code> is used for <code>Consumer</code> components without a <code>Provider</code>.</p>
@@ -567,126 +503,57 @@ let App = () => (
 </code></pre>
 <h3 id="modularazing-context"><a href="#modularazing-context" aria-hidden="true"><span class="icon icon-link"></span></a>Modularazing Context</h3>
 <p>In the "real world", you'll likely expose Contexts via ES Modules.</p>
-<pre><code class="language-js">// person_context.js
-import React from "react";
+<pre><code class="language-js">import React from "react";
 
-let { Provider, Consumer } = React.createContext();
-
-export { Provider, Consumer };
+export const Context = React.createContext();
 </code></pre>
-<pre><code class="language-js">// organization_context.js
-import React from "react";
+<pre><code class="language-js">import React from "react";
 
-let { Provider, Consumer } = React.createContext();
-
-export { Provider, Consumer };
+export const Context = React.createContext();
 </code></pre>
-<p><code>Consumer</code>s can be imported to compose context-aware components.</p>
-<pre><code class="language-jsx">import React from "react";
-import { Consumer as PersonConsumer } from "./person_context";
-import { Consumer as OrganizationConsumer } from "./organization_context";
+<pre><code class="language-jsx">import * as Person from "./person";
+import * as Org from "./organization";
 
 export function ContextBizCard() {
+  const user = React.use(Person.Context);
+  const org = React.use(Org.Context);
+
   return (
-    &#x3C;OrganizationConsumer>
-      {organization => (
-        &#x3C;PersonConsumer>
-          {person => (
-            &#x3C;div className="business-card">
-              &#x3C;h1>{person}&#x3C;/h1>
-              &#x3C;h3>{organization}&#x3C;/h3>
-            &#x3C;/div>
-          )}
-        &#x3C;/PersonConsumer>
-      )}
-    &#x3C;/OrganizationConsumer>
+    &#x3C;div className="business-card">
+      &#x3C;h1>{user.name}&#x3C;/h1>
+      &#x3C;h3>{org.name}&#x3C;/h3>
+    &#x3C;/div>
   );
 }
-</code></pre>
-<p><code>Provider</code>s can be imported to contain and supply values to context-aware components.</p>
-<pre><code class="language-jsx">// app.js
-import { Provider as OrganizationProvider } from "./organization_context";
-import { Provider as PersonProvider } from "./person_context";
-import { ContextBizCard } from "./context_biz_card";
 
-let App = () => (
-  &#x3C;OrganizationProvider value="ACME Co.">
-    &#x3C;PersonProvider value="Yakko">
-      &#x3C;ContextBizCard />
-    &#x3C;/PersonProvider>
-  &#x3C;/OrganizationProvider>
-);
+function App() {
+  return (
+    &#x3C;Org.Context value={{ name: "ACME Co." }}>
+      &#x3C;Person.Context value={{ name: "Yakko" }}>
+        &#x3C;ContextBizCard />
+      &#x3C;/Person.Context>
+    &#x3C;/Org.Context>
+  );
+}
 
 // => Yakko, ACME Co.
 </code></pre>
-<h2 id="a-mental-model-for-context"><a href="#a-mental-model-for-context" aria-hidden="true"><span class="icon icon-link"></span></a>A Mental Model for Context</h2>
-<p>Props are like wires.
-Props are used to "connect" data between components.
-Like wires, the components have to be "touching".
-Meaning that component thats hold data have to render components that need it.</p>
-<p>Context is like a wireless — like infrared.
-Context is used to send a "signal".
-Like wireless, components have to be "in range" — children of a <code>Context.Provider</code> — to recieve the signal.
-Components can observe that signal with a <code>Context.Consumer</code>.</p>
+<h2 id="a-mental-model-for-context"><a href="#a-mental-model-for-context" aria-hidden="true"><span class="icon icon-link"></span></a>A mental model for context</h2>
+<p>Props are like wires.<br>
+Props "connect" data between components.<br>
+Like wires, the components have to be "touching".<br>
+Meaning that component thats <em>hold</em> data have to render components that <em>need</em> it.</p>
+<p>Context is like a wireless.<br>
+Context sends a "signal".<br>
+Like wireless, components don't need to be "touching" they only need to be "in range".
+Meaning that components children of <code>Context</code> can <em>recieve</em> the signal that <code>Context</code> sends.</p>
 <div style="margin-bottom: 8rem"></div>
-<h2 id="usecontext-hook"><a href="#usecontext-hook" aria-hidden="true"><span class="icon icon-link"></span></a><code>useContext</code> Hook</h2>
-<p>As of <a href="https://reactjs.org/blog/2019/02/06/react-v16.8.0.html">v16.8</a> React provides a <a href="https://reactjs.org/docs/hooks-reference.html#usecontext">Hooks API for consuming context</a>.</p>
-<p>The main difference between the <code>Context.Consumer</code> component and the <code>useContext</code> Hook is this:<br>
-The <code>useContext</code> Hook requires a component boundary;<br>
-<code>Context.Consumer</code> can be used inline.</p>
-<p>Here's a re-implementation of <a href="#a-shit-example">A "Shit" Example</a> using hooks:</p>
-<pre><code class="language-jsx">import React from "react";
-
-const ExpletiveContext = React.createContext("shit");
-
-function ContextualExclamation() {
-  let word = React.useContext(ExpletiveContext);
-
-  return (
-    &#x3C;ExpletiveContext.Consumer>
-      {word}
-    &#x3C;/ExpletiveContext.Consumer>
-  );
-}
-
-function VisitGrandmasHouse() {
-  return (
-    &#x3C;ExpletiveContext.Provider value="poop">
-      &#x3C;ContextualExclamation />
-    &#x3C;/ExpletiveContext.Provider>
-  );
-}
-</code></pre>
+<!--## `use` vs `useContext` hook-->
 <div style="margin-bottom: 8rem"></div>
-<h2 id="static-contexttype-hook"><a href="#static-contexttype-hook" aria-hidden="true"><span class="icon icon-link"></span></a><code>static contextType</code> Hook</h2>
-<p>Class components can consume one Context directly using <code>static contextType</code>.</p>
-<p>This differs from <code>Context.Consumer</code> in that it happens in the component definition and it can only consume one Context.<br>
-Access to context is done thru the component instance.</p>
-<p>Here's a re-implementation of <a href="#a-shit-example">A "Shit" Example</a> using <code>static contextType</code>:</p>
-<pre><code class="language-jsx">import React from "react";
-
-const ExpletiveContext = React.createContext("shit");
-
-class ContextualExclamation extends React.Component {
-  static contextType = ExpletiveContext;
-
-  render() {
-    return (
-      &#x3C;ExpletiveContext.Consumer>
-        {this.context.word}
-      &#x3C;/ExpletiveContext.Consumer>
-    );
-  }
-}
-
-function VisitGrandmasHouse() {
-  return (
-    &#x3C;ExpletiveContext.Provider value="poop">
-      &#x3C;ContextualExclamation />
-    &#x3C;/ExpletiveContext.Provider>
-  );
-}
-</code></pre>
+<h2 id="what-is-legacy-context"><a href="#what-is-legacy-context" aria-hidden="true"><span class="icon icon-link"></span></a>What is Legacy Context?</h2>
+<p>Legacy Context refers to a set of APIs that were removed in React 19.<br>
+These include class-based component context.</p>
+<p>Read the <a href="https://reactjs.org/docs/legacy-context.html">Legacy Context doc</a> for more details.</p>
 <div style="margin-bottom: 8rem"></div>
 <p>© 2018 Michael Chan Some Rights Reserved</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
