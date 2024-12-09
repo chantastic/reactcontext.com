@@ -5,5 +5,5 @@ import astroExpressiveCode from 'astro-expressive-code'
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [astroExpressiveCode()]
+	integrations: [astroExpressiveCode({ themes: ['snazzy-light', 'tokyo-night'] })]
 });

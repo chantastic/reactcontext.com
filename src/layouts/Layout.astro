@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" color-mode="user">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="stylesheet" href="https://unpkg.com/mvp.css">
 		<title>Astro Basics</title>
 	</head>
 	<body>
-		<main style="padding: 5dvw;">
+		<main>
 			<slot />
 		</main>
 	</body>
@@ -20,5 +21,25 @@
 		margin: 0;
 		width: 100%;
 		height: 100%;
+	}
+
+	@media (prefers-color-scheme: dark) {
+	  :root[color-mode="user"] {
+	    --color-accent: #1a1b26;
+	    --color-bg: #16161e;
+
+	    --color-bg-secondary: #555;
+	    --color-link: #0097fc;
+	    --color-secondary: #e20de9;
+	    --color-secondary-accent: #e20de94f;
+	    --color-shadow: #bbbbbb20;
+	    --color-table: #0097fc;
+	    --color-text: #f7f7f7;
+	    --color-text-secondary: #aaa;
+	  }
+	}
+
+	.expressive-code + .expressive-code {
+		margin-top: 1rem;
 	}
 </style>
