@@ -1,10 +1,56 @@
 # React Context
 
-Updated for React 19.
+*Updated for React 19.*
 
-## Table of contents
+## TLDR on React Context
 
-## Learn other React stuff good too
+Use Context for *implicit*, client-only, data distribution.  
+Context is an alternative props (which are *explicit* and available to both server and client components).
+
+Context allows for component relationships similar to HTML elements `<li>` and `<ol>`.  
+Here, data applied to the parent, has an implicit impact on how children render.
+
+```jsx title="an HTML comparison"
+<ol start="10">
+  <li>Tenth</li>
+  <li>Eleventh</li>
+  <li>Twelfth</li>
+</ol>
+```
+
+Context makes a value available to all descendents.
+
+```jsx title="parent providing context"
+<UserContext value={user}>
+  <UserAvatar />
+  <UserName />
+</UserContext>
+```
+
+Those descendents must opt in to Context.
+
+```jsx title="child component using context"
+function UserAvatar() {
+  let user = React.use(UserContext);
+
+  return <img src={user.avatar_url} />;
+}
+```
+
+Unlike HTML, Context does not require direct parent-child relationships.  
+Contexts can be sent and recieved *"thru"* intermediate elements, components, and context providers.
+
+```jsx title="child composing two contexts"
+<OrgContext value="ACME Co.">
+  <PersonContext value="Yakko">
+    <div class="my-layout">
+      <OrganizationBizCard /><!-- Yakko, ACME Co. -->
+    </div>
+  </PersonContext>
+</OrgContext>
+```
+
+This doc is a guide for implementing Context in React.
 
 <!-- Begin MailChimp Signup Form -->
 <div id="mc_embed_signup" style="padding-top: 1em">
@@ -17,67 +63,54 @@ Updated for React 19.
     </div>
 </form>
 </div>
-
 <!--End mc_embed_signup-->
 
-## A "shit" example
+## Table of contents
 
-*Shit* is fine word in my house.  
-But my mom hates the word.
+## Real-world React Context (a "shit" example)
 
+*Shit* is fine word in my house. But my mom hates it.
 So I tell my kids to use another word when around grandma.  
 
-The way we adapt language to our company is a great context for `Context`.
+Here's how I'd implement that with React Context.
 
 ```jsx
-// It's ok to say "shit" as a default
+// It's ok to say "shit" as a default expletive
 let ExpletiveContext = React.createContext("shit");
 
-// Context is important communicating
+// But context is important. Learn to account for it.
 function ContextualExclamation() {
   let word = React.use(ExpletiveContext);
+
   return <span>Oh {word}!</span>;
 }
 
-// When at Grandma's house, say "snap" as an expletive
-let GrandmasHouse = props => (
-  <ExpletiveContext value="snap">
-    {props.children}
-  </ExpletiveContext>
+// When at Grandma's house, say "snap" instead
+function AtGrandmasHouse() {
+  return (
+    <ExpletiveContext value="snap">
+      <ContextualExclamation />
+    </ExpletiveContext>
+  )
 );
 
 // => <span>Oh snap!</span>
-let VisitToGrandmasHouse = () => (
-  <GrandmasHouse>
-    <ContextualExclamation />
-  </GrandmasHouse>
-);
 ```
 
-## Create, use, and provide context
+## Context is a 3-part system: create, use, and provide
 
 Context is a 3-part system:
-**Create**, **Use**, **Provide**.
+**create**, **use**, **provide**.
 
-### Create
+**Create** context with `React.createContext`.
 
-Create context with `React.createContext`.
-
-```jsx
-let NameContext = React.createContext();
-```
-
-This function takes an optional argument.
-
-```jsx
+```jsx title="create context"
 let NameContext = React.createContext("Guest");
 ```
 
-### Use
+**Use** context with `React.use`.
 
-Use context with `React.use`.
-
-```jsx
+```jsx title="use context"
 function ContextualGreeting() {
   let name = React.use(NameContext);
 
@@ -85,29 +118,281 @@ function ContextualGreeting() {
 }
 ```
 
-### Provide
+**Provide** context by rendering the `Context` with a `value` prop.  
 
-Provide contexnt "rendering" the returned Context element. Then provide `value` as a prop.
-
-```jsx
-let NameContext = React.createContext("Guest");
-
-function App() {
-  let user = { first_name: "Chan" };
-
-  return (
-    <NameContext value={user.first_name}>
-      <ContextualGreeting />
-    </NameContext>
-  );
-}
+```jsx title="provide context value"
+<NameContext value="Chan">
+  <ContextualGreeting />
+</NameContext>
 
 // => <h1>👋 Chan!</h1>
 ```
 
-## Provide `value`
+## Context is an alternative to props that is implicit
 
-A Context's `value` can take any shape.  
+Context is most useful when many components require the same data.
+
+Here's an example:
+
+```jsx title="app.jsx"
+<>
+  <UserAvatar user={user} />
+  <UserTimeline user={user} />
+  <UserRelatedPosts user={user} />
+</>
+```
+
+These components may, in turn, also pass the same data to their children.
+
+```jsx title="user_avatar.jsx" {9}
+function UserRelatedPosts({ user }) {
+  const related_posts = getRelatedPosts(user);
+
+  return (
+    <ul>
+      {related_posts.map(post => (
+        <li>
+          <span>{post.body}</span>
+          <UserMiniProfile user={user} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+With Context, the data is set once on the parent.
+
+```jsx title="app.jsx" ins=/(UserContext.*)>/ del=/ user={user}/
+<UserContext value={user}>
+  <UserAvatar user={user} />
+  <UserTimeline user={user} />
+  <UserRelatedPosts user={user} />
+</UserContext>
+```
+
+And descendent components opt into this data with `use`.
+
+```jsx title="user_avatar.jsx" ins=/const user =.+/ del=/{ user }/
+function UserAvatar({ user }) {
+  const user = React.use(UserContext);
+
+  return <img src={user.avatar_url} />;
+}
+```
+
+## Think of props like wired and Context like wireless (a mental model)
+
+**Props are like wires.**  
+They "connect" data between components.  
+Like wires, the components have to be "touching".  
+Meaning that components *holding* data have to render components that *need* it.
+
+**Context is like a wireless.**  
+It sends a "signal" that is received by children.  
+Like wireless, components don't need to be "touching" they only need to be "in range".
+Meaning that children of context can *recieve* the signal that context sends.
+
+## Context is available to all descendents (indifferent to how deeply nested)
+
+Every descendent/child of a Context provider can observe Context's value.
+
+```jsx title="any descendent can recieve context" {4, 7, 10}
+function App() {
+  return (
+    <UserContext value={user}>
+      {/* UserContext can be received here… */}
+
+      <div className="app-layout">
+        {/* also here… */}
+
+        <div className="page-layout">
+          {/* and anywhere in this tree… */}
+        </div>
+      </div>
+    </UserContext>
+  );
+}
+```
+
+## Context is composable
+
+Contexts can be chidren of other Contexts. Order doesn't matter much unless it matters to your app.
+
+```jsx title="two contexts; one component"
+let OrgContext = React.createContext();
+let PersonContext = React.createContext();
+
+function App() {
+  return (
+    <OrgContext value="ACME Co.">
+      <PersonContext value="Yakko">
+        <UserOrgBizCard /><!-- Yakko, ACME Co. -->
+      </PersonContext>
+    </OrgContext>
+  );
+}
+
+function UserOrgBizCard() {
+  const org_name = React.use(OrgContext);
+  const person_name = React.use(PersonContext);
+
+  return (
+    <div className="business-card">
+      {person_name}, {org_name}
+    </div>
+  );
+}
+```
+
+## Context can not be sent "over the wire" (it's not available to the server)
+
+Context is only available to client components.  
+Server components cannot recieve context.
+
+## Context is used to implement the compound components pattern
+
+The "compound component" pattern describes components that are isolated but interdependent.
+In HTML, `li` and `ol` are interdepedent. As are `option` and `select`.
+
+This same interdependent relationship can be implemented using React Context.
+
+```jsx title="app.jsx"
+import * as React from "react";
+import * as User from "./user";
+
+function App() {
+  const [editing, setEditing] = React.useState(false);
+
+  const [user, setUser] = React.useState({
+    name: "Guest",
+    avatar_url: "https://example.com/avatar.png"
+  });
+
+  return (
+    <User.Context value={user}>
+      {isEditing
+        ? <User.Form
+            action={formData => {
+              setUser({ name: formData.get('name') });
+              setEditing(false);
+            }}
+          />
+        : <>
+            <User.Avatar />
+            <User.Name />
+            <button onClick={() => setEditing(true)}>
+              Edit
+            </button>
+          </>
+      }
+    </User.Context>
+  );
+}
+```
+
+<div style="margin-bottom: 2rem"></div>
+
+```jsx title="user.jsx"
+import * as React from "react";
+
+export const Context = React.createContext();
+
+function Avatar() {
+  const user = React.use(UserContext);
+
+  return <img className="user-avatar" src={user.avatar_url} />
+}
+
+function Name() {
+  const user = React.use(UserContext);
+
+  return (
+    <span className="user-name">{user.name}</span>
+  );
+}
+
+function Form({ action }) {
+  const user = React.use(UserContext);
+
+  return (
+    <form
+      className="user-form"
+      action={action}
+    >
+      <input type="text" name="name" defaultValue={user.name} />
+    </form>
+  );
+}
+```
+
+## Context can be used to implement distributed state management (with useReducer)
+
+Context makes it possible to distribute data to every component in a component tree.
+
+It's used to distribute data, not manage state.
+That said, it provides the mechanism needed to both distribute state and dispatch updates.
+
+Here's an minimum connection of the two.
+
+```jsx title="app.jsx"
+import * as React from 'react';
+import * as ClickCount from './click_count';
+
+function App() {
+  const clickState = React.useReducer(
+    ClickCount.reducer,
+    ClickCount.initialState
+  );
+
+  return (
+    <ClickCount.Context value={clickState}>
+      <strong>
+        <ClickCount.Show />
+      </strong>
+      <br />
+      <ClickCount.IncrementAction />
+    </ClickCount.Context>
+  );
+}
+```
+
+```jsx title="click_count.jsx"
+import * as React from 'react';
+
+export const initialState = { count: 0 };
+
+export function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    default:
+      return state;
+  }
+}
+
+export const Context = React.createContext();
+
+export function Show() {
+  let [state] = React.use(Context);
+
+  return <>{state.count}</>;
+}
+
+export function IncrementAction() {
+  let [, dispatch] = React.use(Context);
+
+  return (
+    <button onClick={() => dispatch({ type: 'increment' })}>
+      Increment count
+    </button>
+  );
+}
+```
+
+## Any JavaScript value can be be shared via Context
+
+Context can take any shape.  
 Here are examples of valid Contexts values, using a default `value`:
 
 ```jsx
@@ -154,275 +439,105 @@ let FunctionalComponentContext = React.createContext(
 );
 ```
 
-### `value` is required on Context Providers
+## You can set a default `value` when creating Context
 
-Where a Context is provided, the `value` prop is required.
-
-```jsx
-// NOPE
-<SomeContext>
-</SomeContext>
-
-// YEP!
-<SomeContext value="value is a required prop">
-</SomeContext>
-```
-
-### What about the default `value` given to `createContext`?
-
-The default value given to `createContext` is used for `Consumer` components without a `Provider`.
-
-Where `Provider`s wrap their `Consumer`s, all bets are off.
-You must explicitly provide a `value`.
+Context can be initialized with a default `value`.
+When a component attempts to `use` Context, but no corresponding `Context` is found, a default value will be used.
 
 ```jsx
 let UserContext = React.createContext("Guest");
 
-let ContextGreeting = () => (
-  <UserContext.Consumer>
-    {word => <span>Hi {word}!</span>}
-  </UserContext.Consumer>
-);
+function UserGreeting () {
+  let name = React.use(UserContext);
+
+  return <span>Hi {name}!</span>;
+}
 
 let App = props => (
   <div>
-    <ContextGreeting /> {/* => Hi Guest! */}
-    <UserContext.Provider>
-      <ContextGreeting /> {/* => Hi ! */}
-    </UserContext.Provider>
-    <UserContext.Provider value="Bulbasaur">
-      <ContextGreeting /> {/* => Hi Bulbasaur! */}
-    </UserContext.Provider>
+    <ContextGreeting />
+    {/* => Hi Guest! */}
+
+    <UserContext value="Bulbasaur">
+      <ContextGreeting />
+      {/* => Hi Bulbasaur! */}
+    </UserContext>
   </div>
 );
 ```
 
-Prefer video? [Watch along at learnreact.com.](https://learnreact.com/lessons/2018-the-context-api-provide-context)
+## Context can be used inline with the render prop pattern
 
-## Authoring and Modules
-
-A Context's `Consumer` and `Provider` components can be accessed in 2 ways.
-
-The Examples above use JSX' property access syntax.
-This is the style used in official documentation.
+Context exposes a `Consumer` component for inline context use. This allows context to be consumed without creating new components.
 
 ```jsx
-<SomeContext.Provider value="some value">
-  <Context.Consumer>
+<SomeContext value="some value">
+  <SomeContext.Consumer>
     {value => <span>{value}</span>}
-  </Context.Consumer>
-</SomeContext.Provider>
+  </SomeContext.Consumer>
+</SomeContext>
 ```
 
-Above, you access the `Provider` and `Consumer` components through the Context object.
 
-You may prefer to use [object destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring) to assign `Provider` and `Consumer` components to local variables.
-
-```jsx
-// Destructure your Context's Consumer and Provider
-let { Consumer, Provider } = SomeContext;
-
-<Provider value="some value">
-  <Consumer>{value => <span>{value}</span>}</Consumer>
-</Provider>;
-```
-
-Take care where multiple contexts are used.
+Here's an example where multiple contexts are created and used.
 
 ```jsx
-let {
-  Consumer: OrganizationConsumer,
-  Provider: OrganizationProvider
-} = React.createContext();
+const OrgContext = React.createContext();
+const PersonContext = React.createContext();
 
-let {
-  Consumer: PersonConsumer,
-  Provider: PersonProvider
-} = React.createContext();
-
-let App = () => (
-  <OrganizationProvider value="ACME Co.">
-    <PersonProvider value="Yakko">
-      <OrganizationConsumer>
-        {organization => (
-          <PersonConsumer>
-            {person => (
-              <span>
-                {person}, {organization}
-              </span>
-            )}
-          </PersonConsumer>
-        )}
-      </OrganizationConsumer>
-    </PersonProvider>
-  </OrganizationProvider>
-);
+function App () {
+  return (
+    <OrgContext value="ACME Co.">
+      <PersonContext value="Yakko">
+        <OrgContext.Consumer>
+          {organization => (
+            <PersonContext.Consumer>
+              {person => (
+                <span>
+                  {person}, {organization}
+                </span>
+              )}
+            </PersonContext.Consumer>
+          )}
+        </Organization.Consumer>
+      </PersonContext>
+    </OrgContext>
+  )
+}
 
 // => Yakko, ACME Co.
 ```
 
-## Cascading Context
+## Context can cascade
 
-Context cascades.
-
-Consumers use the value from the nearest `Context.Provider`.  
+Consumers use the value from the nearest `Context`.  
 Where none is present, the `createContext` default value is used.
 
 ```jsx
-let { Provider, Consumer } = React.createContext(
-  "global default"
-);
+const MyContext = React.createContext("default");
+
+function ShowContextValue() {
+  const value = React.use(MyContext);
+
+  return <>{value}</>;
+}
 
 function App() {
   return (
     <>
-      <Provider value="outer">
-        <Consumer>
-          {value => <div>{value}</div> /* "outer" */}
-        </Consumer>
+      <MyContext value="outer">
+        <ShowContext /> {/* "outer" */}
 
-        <Provider value="inner">
-          <Consumer>
-            {value => <div>{value}</div> /* "inner" */}
-          </Consumer>
-        </Provider>
+        <MyContext value="inner">
+          <ShowContext /> {/* "inner" */}
+        </MyContext>
       </Provider>
 
-      <Consumer>
-        {value => <div>{value}</div> /* "global default" */}
-      </Consumer>
+      <ShowContext /> {/* "default" */}
     </>
   );
 }
 ```
-
-## Data Distribution, Not State Management
-
-Context makes it possible to distribute data to every component in a component tree.
-
-It's used to distribute data, not manage state.
-That said, it provides the mechanism needed to state and updater functions managed by state containers.
-
-Here's an example of a stateful container that uses Context to distribute local `state` and an `update` function.
-
-```jsx
-let StateContext = React.createContext();
-
-class StateProvider extends React.Component {
-  static defaultProps = {
-    initialState: {}
-  };
-
-  update = (updater, done) => {
-    this.setState(
-      prevState => ({
-        state:
-          typeof updater === "function"
-            ? updater(prevState.state)
-            : updater
-      }),
-      done
-    );
-  };
-
-  state = {
-    state: this.props.initialState,
-    update: this.update
-  };
-
-  render() {
-    return (
-      <StateContext.Provider value={this.state}>
-        {this.props.children}
-      </StateContext.Provider>
-    );
-  }
-}
-
-let App = () => (
-  <StateProvider initialState={{ count: 0 }}>
-    <StateContext.Consumer>
-      {({ state, update }) => (
-        <div>
-          <div>{state.count}</div>
-
-          <button
-            type="button"
-            onClick={() =>
-              update(({ count }) => ({ count: count + 1 }))
-            }
-          >
-            increment
-          </button>
-        </div>
-      )}
-    </StateContext.Consumer>
-  </StateProvider>
-);
-```
-
-### Modularazing Context
-
-In the "real world", you'll likely expose Contexts via ES Modules.
-
-```js title="person_context.jsx"
-import React from "react";
-
-export const Context = React.createContext();
-```
-
-```js title="organization_context.jsx"
-import React from "react";
-
-export const Context = React.createContext();
-```
-
-```jsx title="app.jsx"
-import * as Person from "./person";
-import * as Org from "./organization";
-
-export function ContextBizCard() {
-  const user = React.use(Person.Context);
-  const org = React.use(Org.Context);
-
-  return (
-    <div className="business-card">
-      <h1>{user.name}</h1>
-      <h3>{org.name}</h3>
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <Org.Context value={{ name: "ACME Co." }}>
-      <Person.Context value={{ name: "Yakko" }}>
-        <ContextBizCard />
-      </Person.Context>
-    </Org.Context>
-  );
-}
-
-// => Yakko, ACME Co.
-```
-
-## A mental model for context
-
-Props are like wires.  
-Props "connect" data between components.  
-Like wires, the components have to be "touching".  
-Meaning that component thats *hold* data have to render components that *need* it.
-
-Context is like a wireless.  
-Context sends a "signal".  
-Like wireless, components don't need to be "touching" they only need to be "in range".
-Meaning that components children of `Context` can *recieve* the signal that `Context` sends.
-
-<div style="margin-bottom: 8rem"></div>
-
-<!--## `use` vs `useContext` hook-->
-
-<div style="margin-bottom: 8rem"></div>
 
 ## What is Legacy Context?
 
@@ -433,6 +548,6 @@ Read the [Legacy Context doc](https://reactjs.org/docs/legacy-context.html) for 
 
 <div style="margin-bottom: 8rem"></div>
 
-&copy; 2018 Michael Chan Some Rights Reserved
+&copy; 2024 Michael Chan, Some Rights Reserved
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
